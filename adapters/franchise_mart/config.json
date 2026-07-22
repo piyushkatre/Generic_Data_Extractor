@@ -1,0 +1,188 @@
+{
+  "domain": "franchisemart.in",
+  "name": "FranchiseMart",
+  "priority": 10,
+  "version": "2.0.0",
+  "aliases": [
+    "www.franchisemart.in"
+  ],
+  "metadata": {
+    "description": "Adapter configuration for FranchiseMart franchise detail pages.",
+    "website_type": "franchise_directory",
+    "supports_dynamic_rendering": false
+  },
+  "browser_config": {
+    "headless": true,
+    "scroll_strategy": {
+      "enabled": true,
+      "max_scrolls": 10,
+      "scroll_delay_ms": 700
+    },
+    "wait_strategy": {
+      "wait_until": "domcontentloaded",
+      "timeout_ms": 30000,
+      "wait_after_load_ms": 1000
+    },
+    "lazy_loading": {
+      "enabled": true,
+      "trigger_expanders": false
+    },
+    "explore_tabs": false,
+    "content_container": ".content, .main-content, #content",
+    "selectors_to_ignore": [
+      "header",
+      "footer",
+      "nav",
+      ".sidebar",
+      ".login-box",
+      ".search-box",
+      ".advertisement",
+      ".ads",
+      ".popup",
+      ".modal",
+      ".suggestions",
+      ".wishlist",
+      ".browse-franchise-opportunities",
+      ".newsletter",
+      ".social-icons",
+      "form",
+      "iframe"
+    ]
+  },
+  "dom_clean_config": {
+    "content_container": null,
+    "allowed_tags": [
+      "h1",
+      "h2",
+      "h3",
+      "h4",
+      "p",
+      "div",
+      "span",
+      "ul",
+      "ol",
+      "li",
+      "table",
+      "thead",
+      "tbody",
+      "tr",
+      "th",
+      "td",
+      "img",
+      "a",
+      "dl",
+      "dt",
+      "dd"
+    ],
+    "ignored_sections": [
+      "Browse Franchise Opportunities",
+      "Suggestions",
+      "Related Franchise",
+      "Other Franchise",
+      "Recommended Franchise",
+      "Trending",
+      "Featured",
+      "Login",
+      "Search",
+      "Newsletter",
+      "Advertisement",
+      "Contact Us",
+      "Explore Franchise Mart",
+      "Browse by Location",
+      "Our Partners",
+      "Terms of Service",
+      "Privacy Policy"
+    ],
+    "ignored_classes": [
+      "sidebar",
+      "footer",
+      "header",
+      "navbar",
+      "ads",
+      "popup",
+      "modal",
+      "suggestion",
+      "wishlist",
+      "social",
+      "newsletter"
+    ],
+    "ignored_ids": [
+      "footer",
+      "header",
+      "sidebar",
+      "ads"
+    ],
+    "table_selectors": [
+      "table"
+    ],
+    "image_handling": "keep",
+    "link_handling": "keep"
+  },
+  "clickable_tabs": {
+    "enabled": false,
+    "selectors": [],
+    "allowed_keywords": [],
+    "ignored_keywords": []
+  },
+  "deterministic_selectors": {
+    "key_value_patterns": [
+      "Established",
+      "Franchise Started",
+      "Outlets",
+      "Investment",
+      "Capital Investment",
+      "Expected ROI",
+      "Payback Period",
+      "Franchise Fee",
+      "Minimum Floor Area",
+      "Agreement",
+      "Area",
+      "Training",
+      "Support"
+    ]
+  },
+  "extraction_rules": [
+    "Use deterministic extraction for all financial, investment, area, agreement, and outlet fields.",
+    "Extract About section using Gemini.",
+    "Extract Business Model from About section if not explicitly available.",
+    "Merge Investment Includes values into Additional Information.",
+    "Extract checkbox lists into structured arrays.",
+    "Ignore enquiry forms, wishlist buttons, login forms, search widgets, and suggestion panels.",
+    "Ignore footer navigation.",
+    "Ignore advertisements.",
+    "Preserve contact information only if it belongs to the franchisor.",
+    "Store unmapped structured attributes inside Additional Information."
+  ],
+  "keep_elements": {
+    "keep_heading_keywords": [
+      "About",
+      "Single Unit Investment",
+      "Master Franchise Investment",
+      "Important Points",
+      "Contact Information",
+      "Investment",
+      "Franchise",
+      "Training",
+      "Agreement",
+      "Area",
+      "Support"
+    ],
+    "keep_class_keywords": [
+      "content",
+      "main",
+      "investment",
+      "franchise",
+      "financial",
+      "table",
+      "details"
+    ],
+    "keep_id_keywords": [
+      "content",
+      "investment",
+      "about",
+      "main"
+    ]
+  },
+  "keep_tables": true,
+  "keep_contact_blocks": true
+}

@@ -1,0 +1,222 @@
+{
+  "dataset_name": "franchise_bazar.xlsx",
+  "sheet_name": "Franchise Data",
+  "primary_key": [
+    "Source URL"
+  ],
+  "required_fields": [
+    "Franchise Name",
+    "Source URL"
+  ],
+  "aliases": {
+    "franchise name": "Franchise Name",
+    "franchise_name": "Franchise Name",
+    "source url": "Source URL",
+    "source_url": "Source URL",
+    "brand": "Brand",
+    "category": "Category",
+    "about": "About",
+    "business model": "Business Model",
+    "business_model": "Business Model",
+    "products / services": "Products / Services",
+    "products_services": "Products / Services",
+    "products": "Products / Services",
+    "services": "Products / Services",
+    "investment": "Investment Required",
+    "investment required": "Investment Required",
+    "investment_required": "Investment Required",
+    "capital required": "Investment Required",
+    "minimum investment": "Investment Required",
+    "area required": "Area Required",
+    "area_required": "Area Required",
+    "franchise fee": "Franchise Fee",
+    "franchise_fee": "Franchise Fee",
+    "royalty": "Royalty",
+    "roi": "ROI",
+    "payback period": "Payback Period",
+    "payback_period": "Payback Period",
+    "agreement duration": "Agreement Duration",
+    "agreement_duration": "Agreement Duration",
+    "established year": "Established Year",
+    "established_year": "Established Year",
+    "franchise since": "Franchise Since",
+    "franchise_since": "Franchise Since",
+    "number of outlets": "Number of Outlets",
+    "number_of_outlets": "Number of Outlets",
+    "training": "Training",
+    "support": "Support",
+    "business support": "Support",
+    "franchise support": "Support",
+    "phone": "Phone",
+    "contact number": "Phone",
+    "mobile": "Phone",
+    "email": "Email",
+    "website": "Website",
+    "official website": "Website",
+    "address": "Address",
+    "city": "City",
+    "state": "State",
+    "country": "Country",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "linkedin": "LinkedIn",
+    "keywords": "Keywords"
+  },
+  "columns": [
+    "Source URL",
+    "Franchise Name",
+    "Brand",
+    "Category",
+    "About",
+    "Business Model",
+    "Products / Services",
+    "Investment Required",
+    "Area Required",
+    "Franchise Fee",
+    "Royalty",
+    "ROI",
+    "Payback Period",
+    "Agreement Duration",
+    "Established Year",
+    "Franchise Since",
+    "Number of Outlets",
+    "Training",
+    "Support",
+    "Phone",
+    "Email",
+    "Website",
+    "Address",
+    "City",
+    "State",
+    "Country",
+    "Facebook",
+    "Instagram",
+    "LinkedIn",
+    "Keywords",
+    "Additional Information",
+    "Extraction Date",
+    "Last Updated"
+  ],
+  "extraction_fields": {
+    "franchise_name": {
+      "type": "string",
+      "description": "Name of the primary franchise opportunity on the page"
+    },
+    "brand": {
+      "type": "string",
+      "description": "Official brand name of the franchise"
+    },
+    "category": {
+      "type": "string",
+      "description": "Specific business category of the franchise"
+    },
+    "about": {
+      "type": "string",
+      "description": "About the company, history, or background details"
+    },
+    "business_model": {
+      "type": "string",
+      "description": "Summary of the business concept and model"
+    },
+    "products": {
+      "type": "array",
+      "description": "Array of products offered or sold"
+    },
+    "services": {
+      "type": "array",
+      "description": "Array of services offered or performed"
+    },
+    "investment_required": {
+      "type": "string",
+      "description": "Total capital / investment required text range (e.g. ₹20 Lakhs - 50 Lakhs)"
+    },
+    "area_required": {
+      "type": "string",
+      "description": "Physical floor area required text range (e.g. 500-1000 sq ft)"
+    },
+    "franchise_fee": {
+      "type": "string",
+      "description": "One-time franchise / joining / entry fee required"
+    },
+    "royalty": {
+      "type": "string",
+      "description": "Royalty fee percentage or monthly commission details"
+    },
+    "roi": {
+      "type": "string",
+      "description": "Expected return on investment (ROI) details"
+    },
+    "payback_period": {
+      "type": "string",
+      "description": "Time period expected to break even / recoup investment"
+    },
+    "agreement_duration": {
+      "type": "string",
+      "description": "The duration of the franchise agreement"
+    },
+    "established_year": {
+      "type": "string",
+      "description": "The year the parent brand/company was established"
+    },
+    "franchise_since": {
+      "type": "string",
+      "description": "The year or duration since franchising commenced"
+    },
+    "number_of_outlets": {
+      "type": "string",
+      "description": "Total number of outlets or stores currently operating"
+    },
+    "training": {
+      "type": "string",
+      "description": "Details of training support provided to franchise partners"
+    },
+    "support": {
+      "type": "string",
+      "description": "General business support details"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Official contact phone / mobile numbers"
+    },
+    "email": {
+      "type": "string",
+      "description": "Official contact email addresses"
+    },
+    "website": {
+      "type": "string",
+      "description": "Official company / franchise website URL"
+    },
+    "address": {
+      "type": "string",
+      "description": "Full head office or main store address"
+    },
+    "city": {
+      "type": "string",
+      "description": "City location of the head office or primary outlet"
+    },
+    "state": {
+      "type": "string",
+      "description": "State location of the head office or primary outlet"
+    },
+    "country": {
+      "type": "string",
+      "description": "Country location of the head office or primary outlet"
+    },
+    "facebook": {
+      "type": "string",
+      "description": "URL of the official Facebook page"
+    },
+    "instagram": {
+      "type": "string",
+      "description": "URL of the official Instagram account"
+    },
+    "linkedin": {
+      "type": "string",
+      "description": "URL of the official LinkedIn page"
+    },
+    "keywords": {
+      "type": "string",
+      "description": "Comma-separated search keywords or tags related to the franchise"
+    }
+  }
+}

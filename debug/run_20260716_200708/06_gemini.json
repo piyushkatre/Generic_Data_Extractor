@@ -1,0 +1,87 @@
+{
+  "franchise_name": "Beatbox Gym",
+  "brand": "BeatBox Fitness",
+  "page_type": "FranchiseBazar",
+  "category": "Gym Franchise",
+  "industry": null,
+  "segment": null,
+  "description": null,
+  "about": "Proven in the US and introduced to India for the first time, BeatBox offers a battle-tested fitness model with strong member retention, structured operations, and premium positioning. Unlike traditional gyms that compete only on equipment and location, BeatBox combines boxing-inspired group fitness with coaching, accountability, and community-driven experiences that keep members engaged and motivated.",
+  "business_model": "Combines boxing-inspired group fitness with coaching, accountability, and community-driven experiences to engage and motivate members.",
+  "concept": null,
+  "founded_year": null,
+  "franchise_start_year": null,
+  "operations_commenced": null,
+  "established_year": null,
+  "number_of_outlets": null,
+  "number_of_employees": null,
+  "franchise_since": null,
+  "investment_required": "20Lakhs",
+  "investment_min": null,
+  "investment_max": null,
+  "franchise_fee": "15Lakhs - 20Lakhs",
+  "royalty": null,
+  "roi": null,
+  "payback_period": null,
+  "agreement_duration": null,
+  "area_required": "3000 - 5000 Sq.ft",
+  "area_min": null,
+  "area_max": null,
+  "training": null,
+  "support": null,
+  "marketing_support": null,
+  "operational_support": null,
+  "business_support": null,
+  "phone": "+91",
+  "email": null,
+  "website": null,
+  "address": "Not Revealed",
+  "city": null,
+  "state": null,
+  "country": null,
+  "facebook": null,
+  "instagram": null,
+  "linkedin": null,
+  "twitter": null,
+  "youtube": null,
+  "whatsapp_link": null,
+  "logo": null,
+  "logo_url": null,
+  "images": [],
+  "brochures": [],
+  "documents": [],
+  "faq": [],
+  "additional_information": [],
+  "metadata": [],
+  "entities": [
+    {
+      "entity_type": "Franchise Opportunity",
+      "records": [
+        {
+          "attributes": [
+            {
+              "key": "franchise_name",
+              "value": "Beatbox Gym"
+            },
+            {
+              "key": "phone",
+              "value": "+91"
+            },
+            {
+              "key": "investment",
+              "value": "20Lakhs"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "source_url": "https://www.franchisebazar.com/franchise-opportunity/beatbox-gym",
+  "extracted_at": null,
+  "confidence": null,
+  "page_title": "Beatbox Gym",
+  "page_summary": "Proven in the US and introduced to India for the first time, BeatBox offers a battle-tested fitness model with strong member retention, structured operations, and premium positioning. Unlike traditional gyms that compete only on equipment and location, BeatBox combines boxing-inspired group fitness with coaching, accountability, and community-driven experiences that keep members engaged and motivated.",
+  "products": [],
+  "services": [],
+  "keywords": "Beatbox Gym, BeatBox Fitness, fitness franchise, gym franchise, community-driven fitness, premium fitness brand"
+}

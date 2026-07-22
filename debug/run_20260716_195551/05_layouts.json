@@ -1,0 +1,633 @@
+[
+  {
+    "type": "Specification Layout",
+    "snippet": "<table class=\"table table-striped\"> <thead> <tr> <th class=\"text-center\">Industry</th> <th class=\"text-center\">Segment</th> <th class=\"text-center\">Investment</th> <th class=\"text-center\">Franchise Fe",
+    "extracted_fields": [
+      "investment_required",
+      "franchise_fee",
+      "area_required",
+      "expected_hours",
+      "preferred_locations"
+    ]
+  },
+  {
+    "type": "Content Section",
+    "snippet": "<ul class=\"social-login-list\"> <li> <a href=\"/facebook\"> </a> </li> <li> <a href=\"/google\"> </a> </li> <li> <a href=\"/linkedin\"> </a> </li> <li> <a href=\"/twitter\"> </a> </li> </ul>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"franchisor-head-details\"> <div class=\"f-head-details\"> <div class=\"logo-container\"> <img alt=\"Beatbox Gym\" src=\"/public/img/business/beatbox-gym/profile-pic/logo.jpg\"/> </div> <div class=\"",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"head-item\"> <div class=\"head-title\">Space Req.</div> <div class=\"head-desc\">3000 - 5000 Sq.ft</div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"head-item\"> <div class=\"head-title\">Investment Range</div> <div class=\"head-desc\">Rs. 15Lakhs - 20Lakhs</div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"head-item\"> <div class=\"head-title\">Franchise Outlets</div> <div class=\"head-desc\">Less than 10</div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Summary Layout",
+    "snippet": "<div class=\"body-content\"> <span class=\"body-box\">Operations Commenced On: <span>2023</span></span> <span class=\"body-box\">Franchising / Distribution Commenced On: <span>2025</span></span> <span class",
+    "extracted_fields": [
+      "operations_commenced",
+      "number_of_employees"
+    ]
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"body-item\"> <div class=\"body-head\"> Business Models </div> <div class=\"body-content\"> <div class=\"body-inner-content\"> <table class=\"table table-striped\"> <thead> <tr> <th class=\"text-cent",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"body-item\"> <div class=\"body-head\"> Business Information </div> <div class=\"body-content\"> <div class=\"body-inner-content\"> How many franchisees are presently operational in home country? ",
+    "extracted_fields": []
+  },
+  {
+    "type": "Summary Layout",
+    "snippet": "<div class=\"body-content\"> <div class=\"body-inner-content\"> How many franchisees are presently operational in home country? : Less than 10 </div> <div class=\"body-inner-content\"> How many franchisees ",
+    "extracted_fields": [
+      "number_of_outlets"
+    ]
+  },
+  {
+    "type": "Summary Layout",
+    "snippet": "<div class=\"body-content\"> <div class=\"body-inner-content\"> Do you have a Franchise Agreement? : No </div> <div class=\"body-inner-content\"> Term of Agreement? : Not Revealed </div> <div class=\"body-in",
+    "extracted_fields": []
+  },
+  {
+    "type": "Summary Layout",
+    "snippet": "<div class=\"body-content\"> <div class=\"body-inner-content\"> Do you have a Training Manual? : No </div> <div class=\"body-inner-content\"> Where is the Initial Training conducted? : Not Revealed </div> <",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">Less than 250 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">75Lakhs - 1Crore <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div cl",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">75Lakhs - 1Crore <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">2000 - 3000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">75Lakhs - 1Crore <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div cl",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">75Lakhs - 1Crore <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">750 - 1000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">40Lakhs- 50Lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div cl",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">40Lakhs- 50Lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">3000 - 5000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">40Lakhs- 50Lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div cl",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">40Lakhs- 50Lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">3000 - 5000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">10Lakhs - 15Lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div c",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">10Lakhs - 15Lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">1000 - 2000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">10Lakhs - 15Lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div c",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">10Lakhs - 15Lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">750 - 1000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">30lakhs-40lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div cla",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">30lakhs-40lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">1000 - 2000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">50Lakhs - 75Lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div c",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">50Lakhs - 75Lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">2000 - 3000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">75Lakhs - 1Crore <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div cl",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">75Lakhs - 1Crore <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">2000 - 3000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">15Lakhs - 20Lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div c",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">15Lakhs - 20Lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">750 - 1000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">15Lakhs - 20Lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div c",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">15Lakhs - 20Lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">1000 - 2000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">15Lakhs - 20Lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div c",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">15Lakhs - 20Lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">1000 - 2000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">15Lakhs - 20Lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div c",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">15Lakhs - 20Lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">3000 - 5000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">75Lakhs - 1Crore <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div cl",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">75Lakhs - 1Crore <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">3000 - 5000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">10Lakhs - 15Lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div c",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">10Lakhs - 15Lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">750 - 1000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">1crore-2crore <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div class",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">1crore-2crore <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">3000 - 5000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">1crore-2crore <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div class",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">1crore-2crore <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">3000 - 5000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">75Lakhs - 1Crore <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div cl",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">75Lakhs - 1Crore <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">Less than 250 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">Less than 250 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">75Lakhs - 1Crore <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div cl",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">75Lakhs - 1Crore <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">2000 - 3000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">75Lakhs - 1Crore <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div cl",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">75Lakhs - 1Crore <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">750 - 1000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">40Lakhs- 50Lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div cl",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">40Lakhs- 50Lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">3000 - 5000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">40Lakhs- 50Lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div cl",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">40Lakhs- 50Lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">3000 - 5000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">10Lakhs - 15Lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div c",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">10Lakhs - 15Lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">1000 - 2000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">10Lakhs - 15Lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div c",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">10Lakhs - 15Lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">750 - 1000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">30lakhs-40lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div cla",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">30lakhs-40lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">1000 - 2000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">50Lakhs - 75Lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div c",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">50Lakhs - 75Lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">2000 - 3000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">75Lakhs - 1Crore <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div cl",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">75Lakhs - 1Crore <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">2000 - 3000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">15Lakhs - 20Lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div c",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">15Lakhs - 20Lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">750 - 1000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">15Lakhs - 20Lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div c",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">15Lakhs - 20Lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">1000 - 2000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">15Lakhs - 20Lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div c",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">15Lakhs - 20Lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">1000 - 2000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">15Lakhs - 20Lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div c",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">15Lakhs - 20Lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">3000 - 5000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">75Lakhs - 1Crore <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div cl",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">75Lakhs - 1Crore <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">3000 - 5000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">10Lakhs - 15Lakhs <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div c",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">10Lakhs - 15Lakhs <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">750 - 1000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">1crore-2crore <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div class",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">1crore-2crore <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">3000 - 5000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">1crore-2crore <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div class",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">1crore-2crore <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">3000 - 5000 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"info-box\"> <div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">75Lakhs - 1Crore <span class=\"display-currency-label\">INR</span></div> </div> <div class=\"item\"> <div cl",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Investment</div> <div class=\"value\">75Lakhs - 1Crore <span class=\"display-currency-label\">INR</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Statistic Layout",
+    "snippet": "<div class=\"item\"> <div class=\"name\">Space</div> <div class=\"value\">Less than 250 <span class=\"display-currency-label\">sqft</span></div> </div>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Content Section",
+    "snippet": "<h4 class=\"text-light\">You might also be interested in these franchisors</h4>",
+    "extracted_fields": []
+  },
+  {
+    "type": "Content Section",
+    "snippet": "<h4 class=\"text-center text-light\">Apply Instantly</h4>",
+    "extracted_fields": []
+  }
+]

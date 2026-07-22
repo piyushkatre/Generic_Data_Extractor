@@ -1,0 +1,57 @@
+{
+    "dataset_name": "blog_dataset.xlsx",
+    "sheet_name": "Blog Articles Data",
+    "primary_key": [
+        "Source URL",
+        "Article Title"
+    ],
+    "required_fields": [
+        "Article Title",
+        "Source URL"
+    ],
+    "aliases": {
+        "article title": "Article Title",
+        "article_title": "Article Title",
+        "title": "Article Title",
+        "post title": "Article Title",
+        "name": "Article Title",
+        "source url": "Source URL",
+        "source_url": "Source URL",
+        "author": "Author",
+        "writer": "Author",
+        "by": "Author",
+        "publication date": "Publication Date",
+        "publication_date": "Publication Date",
+        "date": "Publication Date",
+        "published date": "Publication Date",
+        "content summary": "Content Summary",
+        "content_summary": "Content Summary",
+        "description": "Content Summary",
+        "summary": "Content Summary",
+        "category": "Category",
+        "tags": "Tags",
+        "keywords": "Tags",
+        "read time": "Read Time",
+        "read_time": "Read Time",
+        "reading time": "Read Time",
+        "social links": "Social Links",
+        "key statistics": "Key Statistics",
+        "important people": "Important People"
+    },
+    "columns": [
+        "Source URL",
+        "Article Title",
+        "Author",
+        "Publication Date",
+        "Content Summary",
+        "Category",
+        "Tags",
+        "Read Time",
+        "Social Links",
+        "Key Statistics",
+        "Important People",
+        "Additional Information",
+        "Extraction Date",
+        "Last Updated"
+    ]
+}

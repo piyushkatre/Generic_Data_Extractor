@@ -1,0 +1,109 @@
+{
+  "domain": "franchiseindia.com",
+  "name": "FranchiseIndia",
+  "priority": 10,
+  "version": "1.0.0",
+  "aliases": [],
+  "metadata": {
+    "description": "Custom adapter configuration for FranchiseIndia directory listings."
+  },
+  "extraction_rules": [
+    "Identify brand name, investment range, royalty commission terms, and floor space requirements."
+  ],
+  "browser_config": {
+    "scroll_strategy": {
+      "max_scrolls": 15,
+      "scroll_delay_ms": 1000
+    },
+    "wait_strategy": {
+      "wait_until": "domcontentloaded",
+      "timeout_ms": 30000,
+      "wait_after_load_ms": 1000
+    },
+    "lazy_loading": {
+      "enabled": true,
+      "trigger_expanders": true
+    },
+    "content_container": null,
+    "selectors_to_ignore": [".modal", ".popup"]
+  },
+  "dom_clean_config": {
+    "content_container": null,
+    "allowed_tags": ["div", "p", "h1", "h2", "h3", "h4", "h5", "h6", "ul", "ol", "li", "span", "table", "tr", "td", "th", "tbody", "thead", "img", "a"],
+    "removable_selectors": ["nav", "footer", "aside", "header"],
+    "ignored_sections": [
+      "related franchise", "recommended franchise", "other franchise",
+      "trending", "popular", "featured", "you may also like"
+    ],
+    "ignored_classes": ["sidebar", "footer", "header", "navbar", "ads"],
+    "ignored_ids": ["footer", "header", "sidebar", "ads"],
+    "table_selectors": ["table"],
+    "image_handling": "keep",
+    "link_handling": "keep"
+  },
+  "clickable_tabs": {
+    "selectors": [
+      "a[data-toggle=\"tab\"]",
+      "a[data-toggle=\"pill\"]",
+      "a[role=\"tab\"]",
+      "button[role=\"tab\"]",
+      ".nav-tabs a",
+      ".nav-tabs button",
+      ".nav-pills a",
+      ".tabs a",
+      ".tab-link",
+      ".tab-btn",
+      ".franchise-tabs a"
+    ],
+    "allowed_keywords": ["profile", "business summary", "faq", "gallery", "reviews", "details", "contact"],
+    "ignored_keywords": ["login", "register", "signin", "signup"]
+  },
+  "dom_selectors": {
+    "content_container": null
+  },
+  "removable_elements": {
+    "remove_tag_names": ["nav", "footer", "aside", "header"],
+    "remove_heading_keywords": [
+      "related franchise", "recommended franchise", "other franchise",
+      "trending", "popular", "featured", "you may also like",
+      "news", "blog", "search", "comments", "advertisement",
+      "newsletter", "subscribe", "cookie", "privacy", "terms",
+      "login", "register", "download", "share"
+    ],
+    "remove_class_keywords": [
+      "sidebar", "footer", "header", "navbar", "navigation",
+      "ads", "advertisement", "sponsor", "promo", "banner",
+      "cookie", "gdpr", "consent", "modal", "popup", "overlay",
+      "pagination", "social", "newsletter", "subscribe",
+      "comment", "comments", "related", "recommended", "trending",
+      "hidden", "d-none", "loading"
+    ],
+    "remove_id_keywords": [
+      "sidebar", "footer", "header", "navbar", "navigation",
+      "ads", "cookie", "modal", "popup", "newsletter", "subscribe",
+      "login", "register"
+    ],
+    "remove_aria_keywords": ["navigation", "banner", "search", "dialog"]
+  },
+  "keep_elements": {
+    "keep_heading_keywords": [
+      "about", "overview", "brand", "franchise", "business", "model",
+      "investment", "fee", "royalty", "roi", "payback", "cost",
+      "area", "space", "training", "support", "products", "services",
+      "contact", "phone", "email", "website", "address", "faq",
+      "agreement", "tenure", "outlet", "outlets", "established", "history"
+    ],
+    "keep_class_keywords": [
+      "franchise", "brand", "investment", "financial", "fee", "cost",
+      "area", "space", "contact", "address", "main", "content", "table"
+    ],
+    "keep_id_keywords": [
+      "franchise", "investment", "contact", "address", "main", "content", "about"
+    ]
+  },
+  "keep_tables": true,
+  "keep_contact_blocks": true,
+  "class_remove_score": -6.0,
+  "heading_remove_score": -8.0,
+  "keep_threshold": 0.0
+}

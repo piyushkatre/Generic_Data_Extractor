@@ -1,0 +1,43 @@
+{
+    "dataset_name": "misc_dataset.xlsx",
+    "sheet_name": "General Web Data",
+    "primary_key": [
+        "Source URL",
+        "Title"
+    ],
+    "required_fields": [
+        "Title",
+        "Source URL"
+    ],
+    "aliases": {
+        "title": "Title",
+        "name": "Title",
+        "page title": "Title",
+        "source url": "Source URL",
+        "source_url": "Source URL",
+        "description": "Description",
+        "summary": "Description",
+        "content": "Content",
+        "text": "Content",
+        "contact info": "Contact Info",
+        "contact_info": "Contact Info",
+        "phone": "Phone",
+        "email": "Email",
+        "website": "Website",
+        "key statistics": "Key Statistics"
+    },
+    "columns": [
+        "Source URL",
+        "Title",
+        "Description",
+        "Content",
+        "Contact Info",
+        "Phone",
+        "Email",
+        "Website",
+        "Key Statistics",
+        "Additional Information",
+        "Extraction Date",
+        "Last Updated"
+    ]
+}

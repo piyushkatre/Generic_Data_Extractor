@@ -1,0 +1,48 @@
+{
+    "dataset_name": "documentation_dataset.xlsx",
+    "sheet_name": "Documentation Data",
+    "primary_key": [
+        "Source URL",
+        "Section Title"
+    ],
+    "required_fields": [
+        "Section Title",
+        "Source URL"
+    ],
+    "aliases": {
+        "section title": "Section Title",
+        "section_title": "Section Title",
+        "title": "Section Title",
+        "section": "Section Title",
+        "header": "Section Title",
+        "document title": "Document Title",
+        "document_title": "Document Title",
+        "doc title": "Document Title",
+        "source url": "Source URL",
+        "source_url": "Source URL",
+        "description": "Description",
+        "summary": "Description",
+        "content": "Description",
+        "code snippet": "Code Snippet",
+        "code_snippet": "Code Snippet",
+        "code": "Code Snippet",
+        "faq": "FAQ",
+        "social links": "Social Links",
+        "documents": "Documents",
+        "downloads": "Downloads"
+    },
+    "columns": [
+        "Source URL",
+        "Section Title",
+        "Document Title",
+        "Description",
+        "Code Snippet",
+        "FAQ",
+        "Social Links",
+        "Documents",
+        "Downloads",
+        "Additional Information",
+        "Extraction Date",
+        "Last Updated"
+    ]
+}

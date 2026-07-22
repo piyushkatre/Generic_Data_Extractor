@@ -1,0 +1,295 @@
+{
+  "franchise_name": [
+    "Franchise Name",
+    "name",
+    "brand_name",
+    "company_name"
+  ],
+  "brand": [
+    "Brand",
+    "brand"
+  ],
+  "page_type": [
+    "Page Type",
+    "page_type"
+  ],
+  "category": [
+    "Category",
+    "category"
+  ],
+  "industry": [
+    "Industry",
+    "industry"
+  ],
+  "segment": [
+    "Segment",
+    "segment"
+  ],
+  "description": [
+    "Description",
+    "description",
+    "short_description",
+    "summary"
+  ],
+  "about": [
+    "About",
+    "about",
+    "company_profile"
+  ],
+  "business_model": [
+    "Business Model",
+    "business_model",
+    "model"
+  ],
+  "concept": [
+    "Concept",
+    "concept"
+  ],
+  "founded_year": [
+    "Established Year",
+    "Established",
+    "established_year",
+    "founded"
+  ],
+  "franchise_start_year": [
+    "Franchise Since",
+    "Franchised",
+    "franchise_since",
+    "franchise_start_year"
+  ],
+  "operations_commenced": [
+    "Operations Commenced",
+    "operations_commenced",
+    "Operations Commenced On",
+    "Started"
+  ],
+  "number_of_outlets": [
+    "Number of Outlets",
+    "Franchise Outlets",
+    "Outlets",
+    "Stores",
+    "Total Outlets"
+  ],
+  "number_of_employees": [
+    "Number of Employees",
+    "Employees",
+    "Staff"
+  ],
+  "franchise_since": [
+    "Franchising Commenced On",
+    "Franchise Since"
+  ],
+  "investment_required": [
+    "Investment Required",
+    "Investment",
+    "capital_required",
+    "minimum_investment",
+    "Investment Range"
+  ],
+  "investment_min": [
+    "Investment Min",
+    "Minimum Investment",
+    "investment_min"
+  ],
+  "investment_max": [
+    "Investment Max",
+    "Maximum Investment",
+    "investment_max"
+  ],
+  "franchise_fee": [
+    "Franchise Fee",
+    "franchise_fee",
+    "joining_fee"
+  ],
+  "royalty": [
+    "Royalty",
+    "royalty",
+    "commission"
+  ],
+  "roi": [
+    "ROI",
+    "roi",
+    "return_on_investment"
+  ],
+  "payback_period": [
+    "Payback Period",
+    "payback_period",
+    "break_even"
+  ],
+  "area_required": [
+    "Area Required",
+    "Area",
+    "space_required",
+    "Space",
+    "Space Required"
+  ],
+  "area_min": [
+    "Area Min",
+    "Minimum Area",
+    "area_min"
+  ],
+  "area_max": [
+    "Area Max",
+    "Maximum Area",
+    "area_max"
+  ],
+  "expected_hours": [
+    "Expected Hours",
+    "expected_hours",
+    "Expected Working Hours"
+  ],
+  "products": [
+    "Products / Services",
+    "Products",
+    "products"
+  ],
+  "services": [
+    "Products / Services",
+    "Services",
+    "services"
+  ],
+  "training": [
+    "Training",
+    "training"
+  ],
+  "marketing_support": [
+    "Support",
+    "Marketing Support",
+    "marketing_support"
+  ],
+  "operational_support": [
+    "Support",
+    "Business Support",
+    "Operational Support",
+    "operational_support",
+    "business_support"
+  ],
+  "preferred_locations": [
+    "Preferred Locations",
+    "preferred_locations",
+    "Preferred Expansion Locations",
+    "Expansion Locations"
+  ],
+  "expansion_locations": [
+    "Expansion Locations",
+    "expansion_locations"
+  ],
+  "contact_person": [
+    "Contact Person",
+    "contact_person",
+    "contact"
+  ],
+  "phone": [
+    "Phone",
+    "phone",
+    "contact_number",
+    "mobile"
+  ],
+  "email": [
+    "Email",
+    "email"
+  ],
+  "website": [
+    "Website",
+    "website",
+    "official_website"
+  ],
+  "address": [
+    "Address",
+    "address"
+  ],
+  "city": [
+    "City",
+    "city"
+  ],
+  "state": [
+    "State",
+    "state"
+  ],
+  "country": [
+    "Country",
+    "country"
+  ],
+  "facebook": [
+    "Facebook",
+    "facebook"
+  ],
+  "instagram": [
+    "Instagram",
+    "instagram"
+  ],
+  "linkedin": [
+    "LinkedIn",
+    "linkedin"
+  ],
+  "twitter": [
+    "Twitter",
+    "twitter"
+  ],
+  "youtube": [
+    "YouTube",
+    "youtube"
+  ],
+  "logo": [
+    "Logo",
+    "logo"
+  ],
+  "logo_url": [
+    "Logo URL",
+    "logo_url"
+  ],
+  "images": [
+    "Images",
+    "images"
+  ],
+  "brochures": [
+    "Brochures",
+    "brochures"
+  ],
+  "documents": [
+    "Keywords",
+    "Documents",
+    "documents"
+  ],
+  "source_url": [
+    "Source URL",
+    "source_url"
+  ],
+  "extracted_at": [
+    "Extraction Date",
+    "extracted_at",
+    "extraction_date"
+  ],
+  "confidence": [
+    "Confidence",
+    "confidence"
+  ],
+  "agreement_duration": [
+    "Agreement Duration",
+    "agreement_duration",
+    "agreement_term",
+    "Agreement Term"
+  ],
+  "established_year": [
+    "Established Year",
+    "established_year",
+    "Established",
+    "founded_year"
+  ],
+  "whatsapp_link": [
+    "WhatsApp",
+    "whatsapp_link",
+    "WhatsApp Link",
+    "WhatsApp Number"
+  ],
+  "support": [
+    "Support",
+    "support",
+    "Business Support",
+    "Franchise Support"
+  ],
+  "additional_information": [
+    "Additional Information",
+    "additional_information"
+  ]
+}

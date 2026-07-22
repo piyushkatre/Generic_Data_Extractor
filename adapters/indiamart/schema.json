@@ -1,0 +1,172 @@
+{
+    "dataset_name": "indiamart_products.xlsx",
+    "sheet_name": "Products",
+    "primary_key": [
+        "Source URL"
+    ],
+    "required_fields": [
+        "Product Name",
+        "Source URL"
+    ],
+    "aliases": {
+        "product_name": "Product Name",
+        "title": "Product Name",
+        "name": "Product Name",
+        "brand": "Brand",
+        "category": "Category",
+        "description": "Description",
+        "price": "Price",
+        "currency": "Currency",
+        "moq": "MOQ",
+        "company": "Company Name",
+        "company_name": "Company Name",
+        "seller": "Company Name",
+        "manufacturer": "Company Name",
+        "contact_person": "Contact Person",
+        "phone": "Phone",
+        "mobile": "Phone",
+        "email": "Email",
+        "website": "Website",
+        "address": "Address",
+        "city": "City",
+        "state": "State",
+        "country": "Country",
+        "gst": "GST",
+        "iec": "IEC",
+        "business_type": "Business Type",
+        "year_established": "Year Established",
+        "annual_turnover": "Annual Turnover",
+        "specifications": "Product Specifications",
+        "images": "Images",
+        "keywords": "Keywords",
+        "source_url": "Source URL"
+    },
+    "columns": [
+        "Source URL",
+        "Product Name",
+        "Brand",
+        "Category",
+        "Description",
+        "Price",
+        "Currency",
+        "MOQ",
+        "Company Name",
+        "Contact Person",
+        "Phone",
+        "Email",
+        "Website",
+        "Address",
+        "City",
+        "State",
+        "Country",
+        "GST",
+        "IEC",
+        "Business Type",
+        "Year Established",
+        "Annual Turnover",
+        "Product Specifications",
+        "Images",
+        "Keywords",
+        "Additional Information",
+        "Extraction Date",
+        "Last Updated"
+    ],
+    "extraction_fields": {
+        "product_name": {
+            "type": "string",
+            "description": "Official product name displayed on the page."
+        },
+        "brand": {
+            "type": "string",
+            "description": "Brand of the product."
+        },
+        "category": {
+            "type": "string",
+            "description": "Product category."
+        },
+        "description": {
+            "type": "string",
+            "description": "Complete product description."
+        },
+        "price": {
+            "type": "string",
+            "description": "Product selling price."
+        },
+        "currency": {
+            "type": "string",
+            "description": "Currency of the displayed price."
+        },
+        "moq": {
+            "type": "string",
+            "description": "Minimum order quantity."
+        },
+        "company": {
+            "type": "string",
+            "description": "Supplier or company name."
+        },
+        "contact_person": {
+            "type": "string",
+            "description": "Primary contact person."
+        },
+        "phone": {
+            "type": "string",
+            "description": "Contact phone number."
+        },
+        "email": {
+            "type": "string",
+            "description": "Business email."
+        },
+        "website": {
+            "type": "string",
+            "description": "Official website."
+        },
+        "address": {
+            "type": "string",
+            "description": "Company address."
+        },
+        "city": {
+            "type": "string",
+            "description": "City."
+        },
+        "state": {
+            "type": "string",
+            "description": "State."
+        },
+        "country": {
+            "type": "string",
+            "description": "Country."
+        },
+        "gst": {
+            "type": "string",
+            "description": "GST number."
+        },
+        "iec": {
+            "type": "string",
+            "description": "IEC code."
+        },
+        "business_type": {
+            "type": "string",
+            "description": "Nature of business."
+        },
+        "year_established": {
+            "type": "string",
+            "description": "Year of establishment."
+        },
+        "annual_turnover": {
+            "type": "string",
+            "description": "Annual turnover."
+        },
+        "specifications": {
+            "type": "object",
+            "description": "Product specification table as key-value pairs."
+        },
+        "images": {
+            "type": "array",
+            "description": "Product image URLs."
+        },
+        "keywords": {
+            "type": "string",
+            "description": "Relevant product keywords."
+        }
+    }
+}

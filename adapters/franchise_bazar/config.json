@@ -1,0 +1,185 @@
+{
+  "domain": "franchisebazar.com",
+  "name": "FranchiseBazar",
+  "priority": 10,
+  "version": "1.0.0",
+  "aliases": ["franchisebazar.in", "franchisebazaar.com"],
+  "metadata": {
+    "description": "Custom adapter configuration for FranchiseBazar listing directories."
+  },
+  "extraction_rules": [
+    "Always extract investment range (min/max), franchise fee, area size requirements, phone, email, and social networks.",
+    "Resolve FAQ list, and put extra key-values into additional_information."
+  ],
+  "browser_config": {
+    "scroll_strategy": {
+      "max_scrolls": 15,
+      "scroll_delay_ms": 1000
+    },
+    "wait_strategy": {
+      "wait_until": "domcontentloaded",
+      "timeout_ms": 30000,
+      "wait_after_load_ms": 1000
+    },
+    "lazy_loading": {
+      "enabled": true,
+      "trigger_expanders": true
+    },
+    "content_container": null,
+    "selectors_to_ignore": [".modal", ".popup", ".quick-enquiry", "#enquiryModal"]
+  },
+  "dom_clean_config": {
+    "content_container": null,
+    "allowed_tags": ["div", "p", "h1", "h2", "h3", "h4", "h5", "h6", "ul", "ol", "li", "span", "table", "tr", "td", "th", "tbody", "thead", "img", "a"],
+    "removable_selectors": ["nav", "footer", "aside", "header", ".nav-tabs", ".quick-enquiry"],
+    "ignored_sections": [
+      "related franchise", "recommended franchise", "other franchise",
+      "trending franchise", "popular franchise", "featured franchise",
+      "more franchise", "you may also like", "similar franchise"
+    ],
+    "ignored_classes": ["navbar", "sidebar", "ads", "cookie", "modal", "popup", "lead-form"],
+    "ignored_ids": ["footer", "header", "sidebar", "ads", "cookie"],
+    "table_selectors": ["table"],
+    "image_handling": "keep",
+    "link_handling": "keep"
+  },
+  "clickable_tabs": {
+    "selectors": [
+      "a[data-toggle=\"tab\"]",
+      "a[data-toggle=\"pill\"]",
+      "a[role=\"tab\"]",
+      "button[role=\"tab\"]",
+      ".nav-tabs a",
+      ".nav-tabs button",
+      ".nav-pills a",
+      ".tabs a",
+      ".tab-link",
+      ".tab-btn",
+      "li.nav-item a",
+      ".brand-profile-tabs a",
+      ".franchise-navigation a"
+    ],
+    "allowed_keywords": ["profile", "business summary", "faq", "gallery", "reviews"],
+    "ignored_keywords": ["email login", "social login", "login", "register", "signin", "signup"]
+  },
+  "dom_selectors": {
+    "content_container": null
+  },
+  "removable_elements": {
+    "remove_tag_names": ["nav", "footer", "aside", "header"],
+    "remove_heading_keywords": [
+      "related franchise", "recommended franchise", "other franchise",
+      "trending franchise", "popular franchise", "featured franchise",
+      "more franchise", "you may also like", "similar franchise",
+      "explore more", "top franchise",
+      "recent", "latest news", "latest articles", "latest posts",
+      "news & updates", "blog",
+      "search", "search results", "filter", "sort by",
+      "comments", "leave a reply", "write a review",
+      "advertisement", "sponsored", "sponsor",
+      "newsletter", "subscribe", "get updates",
+      "navigation", "menu", "breadcrumb",
+      "cookie", "privacy", "terms of service", "disclaimer",
+      "sign in", "sign up", "login", "register", "create account",
+      "download our app", "follow us", "connect with us",
+      "share this", "like this",
+      "pagination", "load more", "view all"
+    ],
+    "remove_class_keywords": [
+      "sidebar", "side-bar", "sidepanel", "offcanvas",
+      "footer", "header", "topbar", "navbar", "navigation",
+      "sticky", "fixed-top", "fixed-bottom",
+      "mobile-menu", "hamburger", "megamenu",
+      "ads", "advert", "advertisement", "sponsor", "promo",
+      "banner", "promotional", "sponsored",
+      "cookie", "gdpr", "consent", "cookie-bar", "cookie-notice",
+      "modal", "popup", "overlay", "lightbox", "dialog",
+      "pagination", "pager", "breadcrumb", "page-nav",
+      "social-share", "share-buttons", "social-links-inline",
+      "newsletter", "subscribe", "email-signup", "lead-form", "enquiry", "enquire", "quick-enquiry", "apply-form", "contact-form", "inquiry",
+      "comment", "comments", "disqus", "review-section",
+      "related", "recommended", "trending", "popular", "featured",
+      "similar", "you-may-also-like", "more-franchise", "competitor", "similar-listings", "other-brands", "tab-gallery", "tab-events", "tab-news",
+      "hidden", "sr-only", "d-none", "invisible", "offscreen",
+      "display-none", "visually-hidden",
+      "loading", "skeleton", "placeholder", "shimmer"
+    ],
+    "remove_id_keywords": [
+      "sidebar", "footer", "header", "navbar", "navigation",
+      "ads", "cookie", "gdpr", "consent",
+      "modal", "popup", "overlay",
+      "newsletter", "subscribe", "lead-form", "enquiry", "enquire", "contact-form", "apply-form",
+      "comment", "related", "recommended", "trending", "competitor",
+      "login", "register", "signin", "signup",
+      "search-form", "search-bar", "search-box"
+    ],
+    "remove_aria_keywords": [
+      "navigation", "banner", "complementary",
+      "search", "dialog", "alertdialog"
+    ]
+  },
+  "keep_elements": {
+    "keep_heading_keywords": [
+      "about", "overview", "brand overview", "company overview",
+      "about the brand", "about the franchise", "about us",
+      "who we are", "our story", "introduction",
+      "franchise detail", "franchise information", "franchise overview",
+      "franchise opportunity", "franchise model", "business overview",
+      "business model", "business models", "business concept", "business summary", "business information",
+      "investment", "capital required", "total investment",
+      "initial investment", "minimum investment",
+      "franchise fee", "joining fee", "license fee",
+      "royalty", "royalty fee",
+      "roi", "return on investment", "return",
+      "payback", "payback period", "break-even",
+      "financial", "fee structure", "cost",
+      "area required", "area", "space required", "store size",
+      "outlet size", "property requirement", "infrastructure",
+      "floor area", "carpet area",
+      "training", "training program", "training support", "training details",
+      "support", "business support", "franchise support",
+      "operational support", "marketing support", "marketing",
+      "supply chain", "operations", "operational",
+      "products", "services", "product range",
+      "contact", "contact us", "reach us", "get in touch",
+      "phone", "email", "website", "address", "location",
+      "head office", "registered office", "corporate office",
+      "faq", "frequently asked", "questions", "answers",
+      "agreement", "franchise agreement", "tenure", "term",
+      "territory", "area of operation",
+      "outlet", "number of outlets", "total outlets",
+      "established", "history", "since",
+      "certif", "award", "accreditation",
+      "download", "brochure", "document", "documents",
+      "gallery", "media", "images",
+      "key highlights", "highlights", "at a glance",
+      "why", "benefits", "advantage", "ideal entrepreneur profile",
+      "expansion locations", "documentation details"
+    ],
+    "keep_class_keywords": [
+      "franchise-detail", "franchise-info", "franchise-overview",
+      "franchise-content", "franchise-data",
+      "brand-detail", "brand-info",
+      "investment", "financial", "fee", "cost", "pricing",
+      "area", "space", "infrastructure",
+      "contact", "contact-info", "contact-detail", "contact-block",
+      "address", "location-info",
+      "main-content", "primary-content", "content-body",
+      "detail-section", "info-section",
+      "data-table", "info-table", "comparison-table"
+    ],
+    "keep_id_keywords": [
+      "franchise-detail", "franchise-info", "franchise-overview",
+      "franchise-content",
+      "investment", "financial",
+      "contact", "address",
+      "main-content", "primary-content",
+      "about", "overview"
+    ]
+  },
+  "keep_tables": true,
+  "keep_contact_blocks": true,
+  "class_remove_score": -6.5,
+  "heading_remove_score": -9.0,
+  "keep_threshold": 0.0
+}

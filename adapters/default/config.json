@@ -1,0 +1,118 @@
+{
+  "domain": "*",
+  "name": "Default",
+  "priority": 0,
+  "version": "1.0.0",
+  "aliases": [],
+  "metadata": {
+    "description": "Default fallback website adapter configuration."
+  },
+  "extraction_rules": [
+    "Extract all basic page details if no specific adapter matches the site."
+  ],
+  "browser_config": {
+    "scroll_strategy": {
+      "max_scrolls": 10,
+      "scroll_delay_ms": 500
+    },
+    "wait_strategy": {
+      "wait_until": "domcontentloaded",
+      "timeout_ms": 20000,
+      "wait_after_load_ms": 500
+    },
+    "lazy_loading": {
+      "enabled": true,
+      "trigger_expanders": true
+    },
+    "content_container": null,
+    "selectors_to_ignore": []
+  },
+  "dom_clean_config": {
+    "content_container": null,
+    "allowed_tags": ["div", "p", "h1", "h2", "h3", "h4", "h5", "h6", "ul", "ol", "li", "span", "table", "tr", "td", "th", "tbody", "thead", "img", "a"],
+    "removable_selectors": [
+      "nav", "footer", "aside", "header", ".navbar", ".footer", ".header",
+      "iframe", "script", "style", "noscript", "canvas"
+    ],
+    "ignored_sections": [
+      "navigation", "menu", "breadcrumb", "newsletter", "subscribe", 
+      "advertisement", "related posts", "cookie"
+    ],
+    "ignored_classes": ["navbar", "sidebar", "ads", "cookie", "modal", "popup"],
+    "ignored_ids": ["footer", "header", "sidebar", "ads", "cookie"],
+    "table_selectors": ["table"],
+    "image_handling": "keep",
+    "link_handling": "keep"
+  },
+  "clickable_tabs": {
+    "selectors": [
+      "a[data-toggle=\"tab\"]",
+      "a[role=\"tab\"]"
+    ],
+    "allowed_keywords": ["profile", "business summary", "faq", "gallery", "reviews"],
+    "ignored_keywords": ["email login", "social login", "login", "register"]
+  },
+  "dom_selectors": {
+    "content_container": null
+  },
+  "removable_elements": {
+    "remove_tag_names": ["nav", "footer", "aside", "header"],
+    "remove_heading_keywords": [
+      "navigation", "menu", "breadcrumb",
+      "newsletter", "subscribe", "sign up", "sign in", "log in",
+      "advertisement", "sponsored", "promo",
+      "related posts", "recommended posts", "popular posts", "recent posts",
+      "trending", "you may also like",
+      "comments", "leave a reply",
+      "cookie", "privacy notice", "gdpr",
+      "pagination", "load more",
+      "search results"
+    ],
+    "remove_class_keywords": [
+      "navbar", "navigation", "menu", "menubar",
+      "footer", "header", "topbar", "masthead",
+      "sidebar", "side-bar", "sidepanel",
+      "ads", "advert", "advertisement", "sponsor", "promo", "banner",
+      "cookie", "gdpr", "consent",
+      "modal", "popup", "overlay", "lightbox",
+      "pagination", "pager", "breadcrumb",
+      "social-share", "share-button",
+      "newsletter", "subscribe", "email-signup",
+      "comment", "comments", "disqus",
+      "related", "recommended", "trending", "popular",
+      "hidden", "sr-only", "d-none", "invisible", "offscreen",
+      "loading", "skeleton"
+    ],
+    "remove_id_keywords": [
+      "footer", "header", "sidebar",
+      "ads", "cookie", "modal", "popup",
+      "newsletter", "subscribe",
+      "related", "recommended",
+      "login", "register", "signin",
+      "search-form", "search-bar"
+    ],
+    "remove_aria_keywords": ["navigation", "banner", "complementary", "search", "dialog"]
+  },
+  "keep_elements": {
+    "keep_heading_keywords": [
+      "about", "overview", "description", "summary", "introduction",
+      "product", "service", "feature", "offering",
+      "contact", "phone", "email", "address", "location",
+      "information", "details", "specification",
+      "price", "cost", "fee", "plan",
+      "faq", "frequently asked"
+    ],
+    "keep_class_keywords": [
+      "main", "content", "article", "post", "entry",
+      "container", "wrapper", "body", "page-body"
+    ],
+    "keep_id_keywords": [
+      "main", "content", "article", "post"
+    ]
+  },
+  "keep_tables": true,
+  "keep_contact_blocks": true,
+  "class_remove_score": -6.0,
+  "heading_remove_score": -8.0,
+  "keep_threshold": 0.0
+}

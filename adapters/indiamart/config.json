@@ -1,0 +1,251 @@
+{
+    "domain": "indiamart.com",
+    "name": "IndiaMART",
+    "priority": 10,
+    "version": "1.0.0",
+    "aliases": [
+        "www.indiamart.com",
+        "m.indiamart.com"
+    ],
+    "metadata": {
+        "description": "Custom adapter configuration for IndiaMART product pages."
+    },
+    "extraction_rules": [
+        "Always extract product name, brand, category, price, MOQ, specifications, seller/company details, contact information, images and product description.",
+        "Extract product specification tables as structured key-value pairs.",
+        "Resolve company profile, business information and contact details into appropriate fields.",
+        "Put any additional product attributes into additional_information."
+    ],
+    "browser_config": {
+        "scroll_strategy": {
+            "max_scrolls": 12,
+            "scroll_delay_ms": 1000
+        },
+        "wait_strategy": {
+            "wait_until": "domcontentloaded",
+            "timeout_ms": 30000,
+            "wait_after_load_ms": 1000
+        },
+        "lazy_loading": {
+            "enabled": true,
+            "trigger_expanders": true
+        },
+        "content_container": null,
+        "selectors_to_ignore": [
+            ".modal",
+            ".popup",
+            ".cookie-banner",
+            ".newsletter-popup"
+        ]
+    },
+    "dom_clean_config": {
+        "content_container": null,
+        "allowed_tags": [
+            "div",
+            "p",
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
+            "ul",
+            "ol",
+            "li",
+            "span",
+            "table",
+            "tr",
+            "td",
+            "th",
+            "tbody",
+            "thead",
+            "img",
+            "a"
+        ],
+        "removable_selectors": [
+            "nav",
+            "footer",
+            "aside",
+            ".recommendation",
+            ".related-products",
+            ".ads"
+        ],
+        "ignored_sections": [
+            "related products",
+            "similar products",
+            "recommended products",
+            "customers also viewed",
+            "recently viewed",
+            "featured products",
+            "other products"
+        ],
+        "ignored_classes": [
+            "navbar",
+            "sidebar",
+            "ads",
+            "cookie",
+            "modal",
+            "popup",
+            "recommendation"
+        ],
+        "ignored_ids": [
+            "footer",
+            "header",
+            "sidebar",
+            "ads"
+        ],
+        "table_selectors": [
+            "table"
+        ],
+        "image_handling": "keep",
+        "link_handling": "keep"
+    },
+    "clickable_tabs": {
+        "selectors": [
+            "a[data-toggle=\"tab\"]",
+            "a[role=\"tab\"]",
+            "button[role=\"tab\"]",
+            ".nav-tabs a",
+            ".tabs a"
+        ],
+        "allowed_keywords": [
+            "description",
+            "product details",
+            "specifications",
+            "company profile",
+            "business details",
+            "features",
+            "applications",
+            "gallery",
+            "faq",
+            "reviews"
+        ],
+        "ignored_keywords": [
+            "login",
+            "register",
+            "sign in",
+            "sign up"
+        ]
+    },
+    "dom_selectors": {
+        "content_container": null
+    },
+    "removable_elements": {
+        "remove_tag_names": [
+            "nav",
+            "footer",
+            "aside",
+            "header"
+        ],
+        "remove_heading_keywords": [
+            "related products",
+            "recommended products",
+            "customers also viewed",
+            "featured products",
+            "other products",
+            "advertisement",
+            "newsletter",
+            "subscribe",
+            "blog",
+            "articles",
+            "comments",
+            "search",
+            "cookie",
+            "privacy policy",
+            "terms",
+            "login",
+            "register"
+        ],
+        "remove_class_keywords": [
+            "sidebar",
+            "footer",
+            "header",
+            "navbar",
+            "navigation",
+            "ads",
+            "advertisement",
+            "cookie",
+            "popup",
+            "modal",
+            "newsletter",
+            "recommendation",
+            "related-products",
+            "featured-products",
+            "comments",
+            "pagination"
+        ],
+        "remove_id_keywords": [
+            "sidebar",
+            "footer",
+            "header",
+            "navbar",
+            "ads",
+            "cookie",
+            "popup",
+            "newsletter",
+            "recommendation"
+        ],
+        "remove_aria_keywords": [
+            "navigation",
+            "banner",
+            "search",
+            "dialog"
+        ]
+    },
+    "keep_elements": {
+        "keep_heading_keywords": [
+            "about product",
+            "product overview",
+            "product description",
+            "product details",
+            "specifications",
+            "technical specifications",
+            "features",
+            "applications",
+            "highlights",
+            "benefits",
+            "brand",
+            "price",
+            "moq",
+            "company profile",
+            "business details",
+            "contact details",
+            "address",
+            "gst",
+            "iec",
+            "year established",
+            "annual turnover",
+            "packaging details",
+            "delivery",
+            "payment terms",
+            "faq"
+        ],
+        "keep_class_keywords": [
+            "product",
+            "product-detail",
+            "product-info",
+            "product-description",
+            "specification",
+            "specifications",
+            "company-profile",
+            "company-info",
+            "seller-info",
+            "contact-info",
+            "price",
+            "gallery",
+            "image-gallery"
+        ],
+        "keep_id_keywords": [
+            "product",
+            "product-detail",
+            "company-profile",
+            "specification",
+            "contact"
+        ]
+    },
+    "keep_tables": true,
+    "keep_contact_blocks": true,
+    "class_remove_score": -6.5,
+    "heading_remove_score": -9.0,
+    "keep_threshold": 0.0
+}

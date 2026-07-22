@@ -1,0 +1,129 @@
+﻿.venv\Scripts\python : {"timestamp": "2026-07-20T07:17:44.533444Z", "level": "INFO", "logger": 
+"modules.dataset_builder.deterministic_extractor", "message": "[Deterministic] Extracted Field: investment_required 
+from Layout: Specification Layout"}
+At line:1 char:20
++ ... THONUTF8=1; .venv\Scripts\python "C:\Users\piyus\.gemini\antigravity- ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ({"timestamp": "...cation Layout"}:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+{"timestamp": "2026-07-20T07:17:44.563671Z", "level": "INFO", "logger": 
+"modules.dataset_builder.deterministic_extractor", "message": "[Deterministic] Extracted Field: franchise_fee from 
+Layout: Specification Layout"}
+{"timestamp": "2026-07-20T07:17:44.563671Z", "level": "INFO", "logger": 
+"modules.dataset_builder.deterministic_extractor", "message": "[Deterministic] Extracted Field: area_required from 
+Layout: Specification Layout"}
+{"timestamp": "2026-07-20T07:17:44.564671Z", "level": "INFO", "logger": 
+"modules.dataset_builder.deterministic_extractor", "message": "[Deterministic] Extracted Field: expected_hours from 
+Layout: Specification Layout"}
+{"timestamp": "2026-07-20T07:17:44.565694Z", "level": "INFO", "logger": 
+"modules.dataset_builder.deterministic_extractor", "message": "[Deterministic] Extracted Field: preferred_locations 
+from Layout: Specification Layout"}
+{"timestamp": "2026-07-20T07:17:44.567094Z", "level": "INFO", "logger": 
+"modules.dataset_builder.deterministic_extractor", "message": "[Deterministic] Extracted Field: investment_required 
+from Layout: Content Section"}
+{"timestamp": "2026-07-20T07:17:44.567599Z", "level": "INFO", "logger": 
+"modules.dataset_builder.deterministic_extractor", "message": "[Deterministic] Extracted Field: investment_required 
+from Layout: Content Section"}
+{"timestamp": "2026-07-20T07:17:44.569237Z", "level": "INFO", "logger": 
+"modules.dataset_builder.deterministic_extractor", "message": "[Deterministic] Extracted Field: brand from Layout: 
+Content Section"}
+{"timestamp": "2026-07-20T07:17:44.571343Z", "level": "INFO", "logger": 
+"modules.dataset_builder.deterministic_extractor", "message": "[Deterministic] Extracted Field: operations_commenced 
+from Layout: Summary Layout"}
+{"timestamp": "2026-07-20T07:17:44.580773Z", "level": "INFO", "logger": 
+"modules.dataset_builder.deterministic_extractor", "message": "[Deterministic] Extracted fallback phone '919844443200' 
+from whatsapp_link."}
+======================================================================
+STAGE 1 - Full deterministic extraction result
+======================================================================
+  established_year: None
+  roi: None
+  franchise_since: None
+  number_of_outlets: None
+
+======================================================================
+STAGE 2 - Layout classification
+======================================================================
+  Total layouts classified: 172
+    Specification Layout: 1
+    Content Section: 65
+    Statistic Layout: 103
+    Summary Layout: 3
+
+======================================================================
+STAGE 3 - Relationships extracted that mention target field concepts
+======================================================================
+
+  Field: established_year
+    Layout #28 [Content Section]
+      key  : 'Entry investment starts aroundÔé╣2.8 CrPremium clientele, structured programmingStrong positioning in established micro-markets'
+      value: 'Both formats operate under one central operating ecosystem , meaning consistency in experience and predictability in operationsÔÇötwo things most gym chains struggle to maintain at scale'
+    Layout #66 [Summary Layout]
+      key  : 'Operations Commenced On'
+      value: ' 2016'
+
+  Field: roi
+    NOT FOUND in any extracted relationship
+
+  Field: franchise_since
+    Layout #66 [Summary Layout]
+      key  : 'Franchising / Distribution Commenced On'
+      value: ' 2022'
+
+  Field: number_of_outlets
+    NOT FOUND in any extracted relationship
+
+======================================================================
+STAGE 4 - Raw HTML text presence check
+======================================================================
+  OK established_year (Operations Commenced On: 2016): PRESENT in raw HTML
+  OK franchise_since (Franchising Commenced On: 2022): PRESENT in raw HTML
+  OK number_of_outlets (head-desc '80 - 160'): PRESENT in raw HTML
+  OK roi (average ROI of 20-30%): PRESENT in raw HTML
+
+======================================================================
+STAGE 5 - head-item / head-desc pattern (hero summary cards)
+======================================================================
+  Total .head-item elements found: 4
+    title='Space Req.'  ->  desc='Greater than 5000 Sq.ft'
+    title='Investment Range'  ->  desc='Rs. 2Crore - 5Crore'
+    title='Franchise Outlets'  ->  desc='80 - 160'
+
+======================================================================
+STAGE 6 - body-box span pattern (body-content metadata row)
+======================================================================
+  Total .body-box elements found: 3
+    key='Operations Commenced On'  ->  value='2016'
+    key='Franchising / Distribution Commenced On'  ->  value='2022'
+    key='Number of Employees'  ->  value='Not Revealed'
+
+======================================================================
+STAGE 7 - Are head-item / body-box containers classified by layout detector?
+======================================================================
+  Layouts referencing 'head-item' in snippet: 3
+  Layouts referencing 'body-box/body-content' in snippet: 4
+
+======================================================================
+STAGE 8 - Why head-item containers fail Statistic Layout criteria
+======================================================================
+  Item: 'Space Req.' -> 'Greater than 5000 Sq.ft'
+    total_text_len=36, size_check_pass=True, num_children=2
+    t1='Space Req.', t2='Greater than 5000 Sq.ft'
+    is_val1=False, is_val2=True, digit_start1=False, digit_start2=False
+    len_check_pass=True
+    => Would be classified as Statistic Layout: True
+  Item: 'Investment Range' -> 'Rs. 2Crore - 5Crore'
+    total_text_len=38, size_check_pass=True, num_children=2
+    t1='Investment Range', t2='Rs. 2Crore - 5Crore'
+    is_val1=False, is_val2=True, digit_start1=False, digit_start2=False
+    len_check_pass=True
+    => Would be classified as Statistic Layout: True
+  Item: 'Franchise Outlets' -> '80 - 160'
+    total_text_len=28, size_check_pass=True, num_children=2
+    t1='Franchise Outlets', t2='80 - 160'
+    is_val1=True, is_val2=False, digit_start1=False, digit_start2=True
+    len_check_pass=True
+    => Would be classified as Statistic Layout: True
+
+Done.

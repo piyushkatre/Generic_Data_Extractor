@@ -1,0 +1,56 @@
+{
+    "dataset_name": "product_dataset.xlsx",
+    "sheet_name": "Product Data",
+    "primary_key": [
+        "Source URL",
+        "Product Name"
+    ],
+    "required_fields": [
+        "Product Name",
+        "Source URL"
+    ],
+    "aliases": {
+        "product name": "Product Name",
+        "product_name": "Product Name",
+        "title": "Product Name",
+        "name": "Product Name",
+        "source url": "Source URL",
+        "source_url": "Source URL",
+        "brand": "Brand",
+        "price": "Price",
+        "cost": "Price",
+        "rate": "Price",
+        "description": "Description",
+        "summary": "Description",
+        "sku": "SKU",
+        "item number": "SKU",
+        "model": "SKU",
+        "category": "Category",
+        "rating": "Rating",
+        "stars": "Rating",
+        "score": "Rating",
+        "review count": "Review Count",
+        "reviews": "Review Count",
+        "availability": "Availability",
+        "stock": "Availability",
+        "status": "Availability",
+        "specifications": "Specifications",
+        "specs": "Specifications"
+    },
+    "columns": [
+        "Source URL",
+        "Product Name",
+        "Brand",
+        "Price",
+        "Description",
+        "SKU",
+        "Category",
+        "Rating",
+        "Review Count",
+        "Availability",
+        "Specifications",
+        "Additional Information",
+        "Extraction Date",
+        "Last Updated"
+    ]
+}

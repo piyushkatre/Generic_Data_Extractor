@@ -1,0 +1,52 @@
+{
+    "dataset_name": "government_dataset.xlsx",
+    "sheet_name": "Government Data",
+    "primary_key": [
+        "Source URL",
+        "Agency Name"
+    ],
+    "required_fields": [
+        "Agency Name",
+        "Source URL"
+    ],
+    "aliases": {
+        "agency name": "Agency Name",
+        "agency_name": "Agency Name",
+        "agency": "Agency Name",
+        "department": "Agency Name",
+        "organization": "Organization",
+        "source url": "Source URL",
+        "source_url": "Source URL",
+        "description": "Description",
+        "summary": "Description",
+        "contact info": "Contact Information",
+        "contact_info": "Contact Information",
+        "contact information": "Contact Information",
+        "address": "Address",
+        "phone": "Phone",
+        "email": "Email",
+        "website": "Website",
+        "important dates": "Important Dates",
+        "key statistics": "Key Statistics",
+        "documents": "Documents",
+        "downloads": "Downloads"
+    },
+    "columns": [
+        "Source URL",
+        "Agency Name",
+        "Organization",
+        "Description",
+        "Contact Information",
+        "Address",
+        "Phone",
+        "Email",
+        "Website",
+        "Important Dates",
+        "Key Statistics",
+        "Documents",
+        "Downloads",
+        "Additional Information",
+        "Extraction Date",
+        "Last Updated"
+    ]
+}
