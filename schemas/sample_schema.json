@@ -1,0 +1,36 @@
+{
+  "name": "Sample Data Schema",
+  "description": "Sample target schema for structured data extraction output.",
+  "columns": [
+    {
+      "name": "Company Name",
+      "type": "string",
+      "required": true,
+      "description": "Primary name of the company or brand."
+    },
+    {
+      "name": "Investment Required",
+      "type": "string",
+      "required": false,
+      "description": "Estimated investment amount or range."
+    },
+    {
+      "name": "Space Required",
+      "type": "string",
+      "required": false,
+      "description": "Floor area requirement in square feet."
+    },
+    {
+      "name": "Contact Email",
+      "type": "email",
+      "required": false,
+      "description": "Official contact email address."
+    },
+    {
+      "name": "Contact Phone",
+      "type": "phone",
+      "required": false,
+      "description": "Official contact phone number."
+    }
+  ]
+}

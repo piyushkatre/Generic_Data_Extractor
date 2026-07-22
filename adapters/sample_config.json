@@ -1,0 +1,34 @@
+{
+  "domain": "example.com",
+  "name": "Sample Adapter",
+  "priority": 1,
+  "version": "1.0.0",
+  "aliases": ["example"],
+  "metadata": {
+    "description": "Sample adapter configuration for generic web extractors."
+  },
+  "extraction_rules": [
+    "Extract business details, contact information, and investment requirements."
+  ],
+  "browser_config": {
+    "scroll_strategy": {
+      "max_scrolls": 5,
+      "scroll_delay_ms": 500
+    },
+    "wait_strategy": {
+      "wait_until": "domcontentloaded",
+      "timeout_ms": 15000,
+      "wait_after_load_ms": 500
+    },
+    "lazy_loading": {
+      "enabled": true,
+      "trigger_expanders": true
+    }
+  },
+  "dom_clean_config": {
+    "allowed_tags": ["div", "p", "h1", "h2", "h3", "h4", "span", "table", "tr", "td", "th", "a"],
+    "removable_selectors": ["nav", "footer", "aside", "header", "script", "style"],
+    "ignored_classes": ["navbar", "sidebar", "ads", "cookie", "modal"],
+    "ignored_ids": ["footer", "header", "sidebar"]
+  }
+}

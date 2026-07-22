@@ -40,9 +40,18 @@ venv.bak/
 .coverage
 htmlcov/
 
-# Logs
+# Logs & Temporary Dumps
 logs/
 *.log
+debug/
+scratch/
+
+# Generated Datasets
+datasets/*.xlsx
+datasets/*.csv
+*.xlsx
+*.csv
+!.gitkeep
 
 # System files
 .DS_Store
