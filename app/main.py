@@ -1,6 +1,13 @@
 """
 FastAPI Backend Server.
 Provides a simple API endpoint for the AI-powered web data extractor.
+
+This used to call modules.browser/modules.preprocessor/modules.gemini
+directly - an independent, simplified re-implementation of what
+core.pipeline.ExtractionPipeline already does. That meant the same URL could
+produce different results depending on whether it was extracted through
+this API or the Streamlit UI. It now calls the same ExtractionPipeline the
+UI uses, so there is exactly one execution path regardless of entry point.
 """
 
 import os
@@ -9,34 +16,21 @@ import time
 from fastapi import FastAPI, HTTPException, status
 from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional
-from google import genai
 
 # Add the parent directory to python path for modular package resolution
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from modules.browser import fetch_webpage
-from modules.preprocessor import clean_html
-from modules.gemini import extract_web_data, ExtractionResult
+from core.pipeline import ExtractionPipeline
 from utils.logger import get_logger
 
 logger = get_logger(__name__)
 
 app = FastAPI(
     title="Web Data Extractor API",
-    description="Intelligently extracts structured data from any webpage using Gemini.",
+    description="Intelligently extracts structured data from any webpage using the configured LLM provider.",
     version="1.0.0"
 )
 
-# Initialize GenAI Client once at startup
-client: Optional[genai.Client] = None
-try:
-    api_key = os.getenv("GEMINI_API_KEY")
-    if api_key:
-        client = genai.Client(api_key=api_key)
-    else:
-        logger.warning("GEMINI_API_KEY environment variable is missing in FastAPI startup context.")
-except Exception as e:
-    logger.error(f"Failed to initialize GenAI client on FastAPI startup: {e}")
 
 class ExtractionRequest(BaseModel):
     url: str = Field(description="Target webpage URL.")
@@ -45,15 +39,18 @@ class ExtractionRequest(BaseModel):
         description="Optional custom guidelines or instructions to focus the extraction."
     )
 
+
 class ExtractionResponse(BaseModel):
     url: str
-    final_url: str
     page_title: str
     page_type: str
     page_summary: str
     entities: Dict[str, List[Dict[str, Any]]]
-    render_time_ms: int
+    detected_page_type: Optional[str] = None
+    detected_page_type_confidence: Optional[float] = None
+    run_metrics: Dict[str, Any] = Field(default_factory=dict)
     total_time_ms: int
+
 
 @app.post(
     "/extract",
@@ -64,41 +61,30 @@ class ExtractionResponse(BaseModel):
 async def extract_web_data_endpoint(req: ExtractionRequest):
     url = req.url
     user_instructions = req.user_instructions or ""
-    
+
     logger.info(f"Received API extraction request for URL: {url}")
-    
+
     start_time = time.time()
     try:
-        # 1. Fetch webpage via Playwright
-        render_result = await fetch_webpage(url)
-        render_time_ms = render_result["render_time_ms"]
-        
-        # 2. Clean HTML
-        cleaned_html = clean_html(render_result["html"])
-        
-        # 3. Extract data via Gemini
-        extraction = extract_web_data(
-            html_content=cleaned_html,
-            user_instructions=user_instructions,
-            client=client
-        )
-        
-        total_time_ms = int((time.time() - start_time) * 1000)
-        
-        # Get clean dictionary format
+        pipeline = ExtractionPipeline()
+        pipeline_res = await pipeline.run(url, user_instructions=user_instructions)
+
+        extraction = pipeline_res["result"]
         clean_data = extraction.to_clean_dict()
-        
+        total_time_ms = int((time.time() - start_time) * 1000)
+
         return ExtractionResponse(
             url=url,
-            final_url=render_result["final_url"],
-            page_title=extraction.page_title,
-            page_type=extraction.page_type,
-            page_summary=extraction.page_summary,
+            page_title=clean_data["page_title"],
+            page_type=clean_data["page_type"],
+            page_summary=clean_data["page_summary"],
             entities=clean_data["entities"],
-            render_time_ms=render_time_ms,
+            detected_page_type=pipeline_res.get("detected_page_type"),
+            detected_page_type_confidence=pipeline_res.get("detected_page_type_confidence"),
+            run_metrics=pipeline_res.get("run_metrics", {}),
             total_time_ms=total_time_ms
         )
-        
+
     except Exception as e:
         logger.critical(f"API extraction failure for {url}: {e}", exc_info=True)
         raise HTTPException(

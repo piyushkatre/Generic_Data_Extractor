@@ -324,10 +324,10 @@ class AdapterLoader:
     _INITIALIZED = False
 
     @classmethod
-    def initialize(cls, adapters_dir: str = "adapters"):
+    def initialize(cls, adapters_dir: str = "templates"):
         if cls._INITIALIZED:
             return
-            
+
         abs_dir = os.path.abspath(adapters_dir)
         if not os.path.exists(abs_dir):
             os.makedirs(abs_dir, exist_ok=True)

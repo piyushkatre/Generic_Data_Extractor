@@ -1,6 +1,6 @@
-# Generic Schema-Driven Franchise Data Extractor 🚀
+# Generic Schema-Driven Data Extractor 🚀
 
-A highly optimized, generic, and adapter-driven hybrid information extraction pipeline designed to extract structured franchise data from any supported web page and store them accurately into schema-compliant Excel spreadsheets.
+A generic, schema-driven hybrid information extraction pipeline: point it at a URL plus a **Website Configuration** and an **Extraction Schema**, and it renders the page, prunes irrelevant DOM, extracts fields deterministically where possible, fills the rest with an LLM, validates, and writes a schema-compliant spreadsheet row. It ships with franchise-listing templates (FranchiseBazar, FranchiseIndia, IndiaMART, ...), but the extraction engine itself has no franchise-specific assumptions baked in — see `docs/ARCHITECTURE_REDESIGN.md` for the architecture rationale and `docs/PROJECT_STRUCTURE.md` for a fuller module-by-module reference.
 
 ---
 
@@ -12,18 +12,22 @@ The pipeline separates structured data extraction into two distinct, high-perfor
                   URL
                    │
          [Playwright Rendering]
-         - Tab-clicking & Merging
+         - Tab-clicking & Merging (per WebsiteConfig)
                    │
            [DOM Preprocessor]
          - Clean structure & attributes
                    │
        ┌───────────┴───────────┐
        ▼                       ▼
-  [Deterministic]           [Gemini]
+  [Deterministic]           [LLM Provider]
   - BS4 & Regex             - complementary
-  - 24+ structured fields   - reasoning & NLP
+  - schema-alias driven     - reasoning & NLP
        └───────────┬───────────┘
                    ▼
+        [Field-Ownership Merge]
+      - OwnershipResolver decides
+        deterministic vs LLM per field
+                   │
            [Record Validator]
          - Sanitize, Clean & Validate
                    │
@@ -31,16 +35,17 @@ The pipeline separates structured data extraction into two distinct, high-perfor
          - Column & alias resolver
                    │
            [Dataset Builder]
-         - franchise_dataset.xlsx
+         - schema-defined .xlsx output
 ```
 
 ### 1. Robust Tab Collection & DOM Processing
-* **Playwright Render Engine (`modules/browser.py`)**: Sequentially scrolls pages, clicks franchise-specific tabs (`Profile`, `Business Summary`, `FAQ`, `Gallery`, `Reviews`), and merges loaded tab panes into a single unified HTML document.
-* **DOM Preprocessor (`modules/preprocessor.py`)**: Sanitizes structure, keeping only safe layout tags and routing-relevant attributes (`class`, `id`, `role`, etc.).
+* **Playwright Render Engine (`modules/browser.py`)**: Sequentially scrolls pages, clicks the tabs named in the active `WebsiteConfig` (e.g. `Profile`, `Business Summary`, `FAQ`, `Gallery`, `Reviews` for the franchise-listing templates), and merges loaded tab panes into a single unified HTML document.
+* **DOM Preprocessor (`modules/preprocessor.py`)**: Sanitizes structure, keeping only safe layout tags and routing-relevant attributes (`class`, `id`, `role`, etc.), and runs a lightweight page-type detector purely for informational display (it never selects a schema).
 
 ### 2. Hybrid Extraction Layer
-* **Deterministic Extractor (`modules/dataset_builder/deterministic_extractor.py`)**: Parses structured key-value tables and details lists directly from the DOM using BeautifulSoup and regex. Resolves 24+ fields (including contact info, social links, logo URLs, and document assets) instantly without using LLM tokens.
-* **Complementary LLM Extractor (`modules/gemini.py`)**: Uses Gemini 2.5 Flash to extract descriptive fields requiring natural language understanding (e.g. *About*, *Business Model*, *Products / Services*, *Ideal Franchisee*, *Marketing Support*). Gemini never overwrites deterministic DOM values.
+* **Deterministic Extractor (`modules/dataset_builder/deterministic_extractor.py`)**: Parses structured key-value tables and details lists directly from the DOM using BeautifulSoup and regex, resolving whichever fields the active `ExtractionSchema` declares aliases for — instantly, without using LLM tokens.
+* **LLM Extractor (`modules/gemini.py` + `modules/llm/`)**: Calls the configured provider (Gemini or Ollama) to fill in fields requiring natural language understanding, validated against a dynamic model built purely from the active schema (no inherited fields from other verticals).
+* **Field-Ownership Merge (`core/ownership.py`)**: For each schema field, `OwnershipResolver` decides whether the deterministic value or the LLM value wins, based on the field's own declared ownership (if set) or a generic type-based default.
 
 ### 3. Record Validator (`modules/dataset_builder/record_validator.py`)
 A dedicated validation layer between extraction and schema mapping that enforces strict quality checks:
@@ -61,8 +66,8 @@ A dedicated validation layer between extraction and schema mapping that enforces
 
 We have recently upgraded the extraction pipeline with several key features to boost quality, diagnostics, and robustness:
 
-### 1. Adapter-Driven DOM Cleaning & Pruning
-* **Dynamic Keywords Preservation**: The preprocessor dynamically builds preservation lists based on columns, aliases, and extraction fields from the adapter's schema, instead of using hardcoded keywords.
+### 1. Config/Schema-Driven DOM Cleaning & Pruning
+* **Dynamic Keywords Preservation**: The preprocessor dynamically builds preservation lists based on the active `ExtractionSchema`'s columns, aliases, and extraction fields, instead of using hardcoded keywords.
 * **Two-Level DOM Filtering**: Introduced `CRITICAL` vs `NORMAL` priority filtering level inside the Relevant DOM Builder. Critical fields, contacts, and location blocks are guaranteed to never be removed during structuring.
 
 ### 2. Multi-Format Parsers & Advanced Normalization
@@ -91,29 +96,50 @@ We have recently upgraded the extraction pipeline with several key features to b
 ```
 /
 ├── app/
-│   └── app.py                   # Streamlit layout and extraction grid UI
+│   ├── app.py                   # Streamlit layout and extraction grid UI
+│   └── main.py                  # FastAPI endpoint - same ExtractionPipeline as the UI
+├── core/
+│   ├── pipeline.py              # ExtractionPipeline - the single orchestration path
+│   ├── runtime_adapter.py       # RuntimeAdapter - built from a WebsiteConfig + ExtractionSchema
+│   ├── ownership.py             # OwnershipResolver - deterministic-vs-LLM field merge
+│   ├── pipeline_context.py      # PipelineContext - runtime state carrier for one run
+│   └── job_executor.py          # execute_job() - runs an ExtractionJob's URLs through the pipeline
+├── config/
+│   ├── website_config.py        # WebsiteConfig
+│   ├── extraction_schema.py     # ExtractionField / ExtractionSchema
+│   └── extraction_job.py        # ExtractionJob
 ├── modules/
 │   ├── browser.py               # Playwright tab clicker and page loader
-│   ├── preprocessor.py          # HTML cleaner and attribute whitelist
-│   ├── gemini.py                # Pydantic schemas, Gemini API caller & result merger
+│   ├── preprocessor.py          # HTML cleaner, attribute whitelist, page-type detector
+│   ├── gemini.py                # Thin LLM-provider-call wrapper (no orchestration)
+│   ├── validation/
+│   │   └── formatters.py        # Currency/area/hours/phone normalizers
 │   ├── dataset_builder/
 │   │   ├── builder.py           # Excel spreadsheet writer
 │   │   ├── deterministic_extractor.py # Local BS4/Regex table & list parser
 │   │   ├── record_validator.py  # Data cleansing, validation & normalization
-│   │   └── schema_mapper.py     # Schema matching tier resolver
-│   ├── evaluation/
-│   │   ├── dom_checker.py       # Anti-hallucination DOM verification
-│   │   └── quality_evaluator.py # Extraction coverage reporter
-│   └── semantic_chunker/
-│       └── chunker.py           # Text layout segmenter
+│   │   ├── schema_mapper.py     # Schema matching tier resolver
+│   │   ├── schema_loader.py     # build_model(): schema -> dynamic Pydantic model
+│   │   └── generic_record.py    # GenericExtractionRecord - the minimal universal core
+│   ├── merger/                  # Legacy, unused (abandoned chunking strategy)
+│   └── semantic_chunker/        # Legacy, unused (abandoned chunking strategy)
+├── templates/                   # WebsiteConfig + ExtractionSchema pairs, one folder per site
+│   ├── default/
+│   ├── franchise_bazar/
+│   └── ...
 ├── schemas/
-│   ├── franchise_schema.json    # Excel columns list blueprint
+│   ├── franchise_schema.json    # Legacy page-type schema (optional fallback only)
 │   └── schema_aliases.json      # Column headers alias directory
 ├── tests/
 │   ├── test_deterministic_extractor.py
 │   ├── test_record_validator.py
 │   ├── test_schema_mapper.py
-│   └── ...                      # 83+ comprehensive test suites
+│   ├── test_schema_field_omission.py  # Verifies undeclared schema fields never surface end-to-end
+│   ├── test_pipeline_integration.py
+│   └── ...                      # 140+ comprehensive test suites
+├── docs/
+│   ├── PROJECT_STRUCTURE.md     # Fuller module-by-module reference
+│   └── ARCHITECTURE_REDESIGN.md # Forward-looking blueprint (Profiles, versioning, stores, UI)
 ├── requirements.txt             # Dependency requirements
 └── README.md                    # Core project blueprints
 ```

@@ -6,9 +6,10 @@ import json
 from pydantic import BaseModel
 
 from modules.llm.factory import get_llm_provider
-from modules.llm.ollama_provider import OllamaProvider
+from modules.llm.ollama_provider import OllamaProvider, OllamaModelUnavailableError, classify_transport_error
 from modules.llm.gemini_provider import GeminiProvider
 from modules.adapter_loader import ExtractionResult, ExtractedEntity, ExtractedRecord, KeyValue
+from modules.config import ExtractorConfig
 
 @pytest.fixture
 def mock_extraction_result():
@@ -297,4 +298,154 @@ def test_key_value_item_normalization_mapping():
     normalized_correct = normalize_data(correct_data, TestKeyValueModel, logs)
     assert normalized_correct == correct_data
     assert not logs
+
+
+# ------------------------------------------------------------------
+# Configurable timeout (Task 3 / Task 7): OLLAMA_TIMEOUT and
+# OLLAMA_CONNECT_TIMEOUT flow from env -> ExtractorConfig -> the
+# httpx.Timeout object passed to httpx.post().
+# ------------------------------------------------------------------
+
+def test_config_reads_ollama_timeout_env_vars():
+    with patch.dict(os.environ, {"OLLAMA_TIMEOUT": "900", "OLLAMA_CONNECT_TIMEOUT": "5"}):
+        config = ExtractorConfig.load()
+    assert config.OLLAMA_TIMEOUT == 900.0
+    assert config.OLLAMA_CONNECT_TIMEOUT == 5.0
+
+
+def test_config_ollama_timeout_defaults_when_unset():
+    with patch.dict(os.environ, {}, clear=False):
+        os.environ.pop("OLLAMA_TIMEOUT", None)
+        os.environ.pop("OLLAMA_CONNECT_TIMEOUT", None)
+        config = ExtractorConfig.load()
+    assert config.OLLAMA_TIMEOUT == 600.0
+    assert config.OLLAMA_CONNECT_TIMEOUT == 10.0
+
+
+@patch("httpx.post")
+def test_ollama_post_uses_configured_timeout(mock_post, mock_extraction_result):
+    mock_response = MagicMock()
+    mock_response.status_code = 200
+    mock_response.json.return_value = {
+        "message": {"role": "assistant", "content": mock_extraction_result.model_dump_json()}
+    }
+    mock_post.return_value = mock_response
+
+    with patch.dict(os.environ, {"OLLAMA_TIMEOUT": "123", "OLLAMA_CONNECT_TIMEOUT": "7"}):
+        provider = OllamaProvider()
+        provider.extract(
+            html_content="<html><body>Test</body></html>",
+            response_model=ExtractionResult
+        )
+
+    used_timeout = mock_post.call_args.kwargs["timeout"]
+    assert isinstance(used_timeout, httpx.Timeout)
+    assert used_timeout.read == 123.0
+    assert used_timeout.connect == 7.0
+
+
+# ------------------------------------------------------------------
+# classify_transport_error (Task 2 / Task 4): purely type-based
+# classification, no model-specific or website-specific branching.
+# ------------------------------------------------------------------
+
+def test_classify_transport_error_connection_failure():
+    assert classify_transport_error(httpx.ConnectError("refused")) == "connection failure"
+    assert classify_transport_error(httpx.ConnectTimeout("refused")) == "connection failure"
+
+
+def test_classify_transport_error_timeout():
+    assert classify_transport_error(httpx.ReadTimeout("slow")) == "timeout"
+    assert classify_transport_error(httpx.PoolTimeout("pool full")) == "timeout"
+
+
+def test_classify_transport_error_other_transport_failure():
+    request = httpx.Request("POST", "http://localhost:11434/api/chat")
+    response = httpx.Response(status_code=500, request=request)
+    err = httpx.HTTPStatusError("server error", request=request, response=response)
+    assert classify_transport_error(err) == "transport failure"
+
+
+# ------------------------------------------------------------------
+# Model-unavailable (Task 3 / Task 4): a 404 or an {"error": ...} body
+# is a real HTTP response, not a transport failure - it must raise
+# immediately and NOT be retried, since retrying can't make a missing
+# model appear.
+# ------------------------------------------------------------------
+
+@patch("httpx.post")
+def test_ollama_model_unavailable_404_fails_fast_no_retry(mock_post):
+    mock_response = MagicMock()
+    mock_response.status_code = 404
+    mock_response.json.return_value = {"error": "model 'qwen2.5:7b' not found, try pulling it first"}
+    mock_post.return_value = mock_response
+
+    provider = OllamaProvider()
+    metrics = {"requests": 0, "retries": 0}
+
+    with patch("time.sleep") as mock_sleep:
+        with pytest.raises(OllamaModelUnavailableError):
+            provider.extract(
+                html_content="<html><body>Test</body></html>",
+                response_model=ExtractionResult,
+                context_metrics=metrics
+            )
+
+    assert mock_post.call_count == 1
+    assert metrics["requests"] == 1
+    assert metrics["retries"] == 0
+    mock_sleep.assert_not_called()
+
+
+@patch("httpx.post")
+def test_ollama_model_unavailable_error_field_in_200_response_fails_fast(mock_post):
+    mock_response = MagicMock()
+    mock_response.status_code = 200
+    mock_response.json.return_value = {"error": "model not found"}
+    mock_post.return_value = mock_response
+
+    provider = OllamaProvider()
+    with pytest.raises(OllamaModelUnavailableError):
+        provider.extract(
+            html_content="<html><body>Test</body></html>",
+            response_model=ExtractionResult
+        )
+
+    assert mock_post.call_count == 1
+
+
+# ------------------------------------------------------------------
+# Read timeouts are still retried (only genuinely unrecoverable
+# failures like a missing model skip retry) - a ReadTimeout behaves
+# exactly like the pre-existing ConnectError retry test.
+# ------------------------------------------------------------------
+
+@patch("httpx.post")
+def test_ollama_extraction_retry_on_read_timeout(mock_post, mock_extraction_result):
+    mock_response = MagicMock()
+    mock_response.status_code = 200
+    mock_response.json.return_value = {
+        "message": {"role": "assistant", "content": mock_extraction_result.model_dump_json()}
+    }
+
+    mock_post.side_effect = [
+        httpx.ReadTimeout("timed out"),
+        mock_response
+    ]
+
+    metrics = {"requests": 0, "retries": 0}
+    provider = OllamaProvider()
+
+    with patch("time.sleep") as mock_sleep:
+        result = provider.extract(
+            html_content="<html><body>Test</body></html>",
+            response_model=ExtractionResult,
+            context_metrics=metrics
+        )
+
+    assert isinstance(result, ExtractionResult)
+    assert mock_post.call_count == 2
+    assert metrics["requests"] == 2
+    assert metrics["retries"] == 1
+    mock_sleep.assert_called_once()
 

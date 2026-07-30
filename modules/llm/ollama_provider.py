@@ -11,6 +11,18 @@ from modules.llm.gemini_provider import repair_json_string
 
 logger = get_logger(__name__)
 
+
+class OllamaModelUnavailableError(Exception):
+    """
+    Raised when Ollama reports that the requested model doesn't exist on the
+    server (e.g. it was never pulled). Deliberately NOT a subclass of any
+    httpx error - it is raised from a successfully-received HTTP response,
+    not a transport failure, and it is never retried: retrying cannot make
+    a missing model appear, so retrying would only waste
+    (MAX_RETRIES + 1) * OLLAMA_TIMEOUT seconds before failing anyway.
+    """
+
+
 def get_latest_debug_dir() -> Optional[str]:
     """
     Scans the debug directory to find the most recent 'run_*' folder.
@@ -369,6 +381,32 @@ def normalize_data(data: Any, model: Type[BaseModel], normalization_logs: list[s
     return data
 
 
+def classify_transport_error(exc: httpx.HTTPError) -> str:
+    """
+    Maps an httpx exception to one of the generic failure categories this
+    provider distinguishes for logging and retry decisions. Classification
+    is purely by exception TYPE (never by message text, model name, or
+    website), so this works identically for any Ollama model or host.
+
+    - "connection failure": couldn't even reach the server (it's down, the
+      wrong host/port, or refusing connections). Usually means Ollama isn't
+      running or OLLAMA_BASE_URL is wrong.
+    - "timeout": a connection was established but no response arrived within
+      the configured timeout - for a chat/generate request this almost
+      always means the model is still generating. Increasing OLLAMA_TIMEOUT
+      (or OLLAMA_CONNECT_TIMEOUT, if the timeout is a ConnectTimeout) is the
+      fix, not more retries.
+    - "transport failure": any other network/protocol-level problem, or a
+      non-2xx HTTP response from a server that WAS reached (e.g. a transient
+      5xx) - distinct from "connection failure" in that Ollama did respond.
+    """
+    if isinstance(exc, (httpx.ConnectError, httpx.ConnectTimeout)):
+        return "connection failure"
+    if isinstance(exc, httpx.TimeoutException):
+        return "timeout"
+    return "transport failure"
+
+
 class OllamaProvider(BaseLLMProvider):
     """
     Ollama extraction provider using local REST API.
@@ -475,6 +513,18 @@ class OllamaProvider(BaseLLMProvider):
 
         max_retries = config.MAX_RETRIES
         base_delay = config.RETRY_DELAY
+        # Split transport timeout: connecting to a local Ollama server should
+        # be near-instant (OLLAMA_CONNECT_TIMEOUT), while generation itself
+        # is the genuinely slow, model-size-dependent phase
+        # (OLLAMA_TIMEOUT) - a single flat timeout can't distinguish "Ollama
+        # isn't running" from "the model is still working", but a connect
+        # timeout that fires quickly vs a read timeout that fires late can.
+        request_timeout = httpx.Timeout(
+            connect=config.OLLAMA_CONNECT_TIMEOUT,
+            read=config.OLLAMA_TIMEOUT,
+            write=config.OLLAMA_CONNECT_TIMEOUT,
+            pool=config.OLLAMA_CONNECT_TIMEOUT,
+        )
         attempt = 0
         last_error = None
 
@@ -482,6 +532,7 @@ class OllamaProvider(BaseLLMProvider):
             if context_metrics is not None:
                 context_metrics["requests"] += 1
 
+            request_start = time.time()
             try:
                 # Estimate prompt tokens and verify budget safety
                 prompt_len = len(system_instruction) + len(final_user_prompt)
@@ -518,18 +569,53 @@ class OllamaProvider(BaseLLMProvider):
                         f"configured context window ({context_window_val})! Truncation will occur."
                     )
                 
+                logger.info(
+                    f"Ollama Request - Sending to {base_url.rstrip('/')}/api/chat "
+                    f"(connect_timeout={config.OLLAMA_CONNECT_TIMEOUT}s, read_timeout={config.OLLAMA_TIMEOUT}s)"
+                )
                 response = httpx.post(
                     f"{base_url.rstrip('/')}/api/chat",
                     json=payload,
-                    timeout=300.0
+                    timeout=request_timeout
                 )
+                elapsed = time.time() - request_start
+                logger.info(f"Ollama Request - Response received in {elapsed:.1f}s (status {response.status_code})")
 
-                
+                # Ollama reports a missing/unpulled model as a 404 with an
+                # {"error": ...} body - this is a successfully-received HTTP
+                # response, not a transport failure, so it's checked here
+                # (and raised as OllamaModelUnavailableError below) rather
+                # than left to raise_for_status(), which would only produce
+                # a generic HTTPStatusError that gets retried pointlessly.
+                if response.status_code == 404:
+                    raise OllamaModelUnavailableError(
+                        f"Ollama reports model '{model}' is unavailable (HTTP 404) - "
+                        f"it may not be pulled yet. Try: ollama pull {model}"
+                    )
+
                 if response.status_code != 200:
                     response.raise_for_status()
-                
+
                 resp_json = response.json()
+
+                error_field = resp_json.get("error")
+                if error_field:
+                    raise OllamaModelUnavailableError(
+                        f"Ollama reported an error for model '{model}': {error_field}"
+                    )
+
                 raw_response_text = resp_json.get("message", {}).get("content", "").strip()
+
+                # Ollama's own token counts (accurate, unlike the estimated
+                # prompt_tokens logged above) - logged when present so future
+                # timeout tuning can be based on real generation length.
+                prompt_eval_count = resp_json.get("prompt_eval_count")
+                eval_count = resp_json.get("eval_count")
+                if prompt_eval_count is not None or eval_count is not None:
+                    logger.info(
+                        f"Ollama Response - Server-reported prompt tokens: {prompt_eval_count}, "
+                        f"response tokens: {eval_count}"
+                    )
 
                 # Issue 4: Save raw response before any validation/normalizations
                 is_debug = os.getenv("DEBUG", "false").lower() in ("true", "1", "yes") or os.getenv("DEVELOPER_MODE", "false").lower() in ("true", "1", "yes")
@@ -613,14 +699,33 @@ class OllamaProvider(BaseLLMProvider):
                         logger.error(f"Schema validation failed after normalization: {reval_err}")
                         raise reval_err
 
-            except (httpx.ConnectError, httpx.ConnectTimeout, httpx.RequestError, httpx.HTTPStatusError) as transport_err:
-                logger.warning(f"Ollama connection/timeout/transport error: {transport_err}. Attempt {attempt + 1}/{max_retries + 1}")
+            except OllamaModelUnavailableError as unavailable_err:
+                # Retrying cannot make a missing/errored model appear -
+                # raise immediately instead of wasting
+                # (MAX_RETRIES + 1) * OLLAMA_TIMEOUT seconds on a problem
+                # that will fail identically every time.
+                elapsed = time.time() - request_start
+                logger.error(f"Ollama model unavailable after {elapsed:.1f}s: {unavailable_err}")
+                raise unavailable_err
+            except httpx.HTTPError as transport_err:
+                # Covers both httpx.RequestError (connection/timeout/network
+                # failures - request never got a response) and
+                # httpx.HTTPStatusError (a non-2xx response WAS received).
+                # classify_transport_error() distinguishes these for logging
+                # only; retry/backoff behavior is identical for all of them.
+                elapsed = time.time() - request_start
+                category = classify_transport_error(transport_err)
+                logger.warning(
+                    f"Ollama request failed ({category}) after {elapsed:.1f}s: {transport_err}. "
+                    f"Attempt {attempt + 1}/{max_retries + 1} "
+                    f"(connect_timeout={config.OLLAMA_CONNECT_TIMEOUT}s, read_timeout={config.OLLAMA_TIMEOUT}s)"
+                )
                 last_error = transport_err
                 if attempt < max_retries:
                     if context_metrics is not None:
                         context_metrics["retries"] += 1
                     delay = base_delay * (attempt + 1)
-                    logger.info(f"Retrying in {delay}s...")
+                    logger.info(f"Retrying in {delay}s (reason: {category})...")
                     time.sleep(delay)
                     attempt += 1
                 else:
@@ -630,7 +735,8 @@ class OllamaProvider(BaseLLMProvider):
                 logger.error(f"Schema validation error raised immediately: {val_err}")
                 raise val_err
             except Exception as other_err:
-                logger.warning(f"Ollama request failed with syntax or parsing error: {other_err}. Attempt {attempt + 1}/{max_retries + 1}")
+                elapsed = time.time() - request_start
+                logger.warning(f"Ollama request failed with syntax or parsing error after {elapsed:.1f}s: {other_err}. Attempt {attempt + 1}/{max_retries + 1}")
                 last_error = other_err
                 if attempt < max_retries:
                     if context_metrics is not None:
@@ -642,5 +748,9 @@ class OllamaProvider(BaseLLMProvider):
                 else:
                     break
 
-        logger.error(f"All Ollama attempts failed. Last error: {last_error}")
+        logger.error(
+            f"All Ollama attempts failed for model '{model}' after {attempt + 1} attempt(s) "
+            f"(read_timeout={config.OLLAMA_TIMEOUT}s, connect_timeout={config.OLLAMA_CONNECT_TIMEOUT}s). "
+            f"Last error: {last_error}"
+        )
         raise last_error

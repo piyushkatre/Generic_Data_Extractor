@@ -13,6 +13,31 @@ from utils.logger import get_logger
 
 logger = get_logger(__name__)
 
+
+class BrowserNavigationError(Exception):
+    """
+    Raised when Playwright cannot land the browser on the requested page -
+    either page.goto() raised on every attempt and the browser is stuck on
+    Chromium's internal error interstitial, or navigation otherwise settled
+    on that interstitial. Generic to any site: the check is purely on the
+    browser's own navigation outcome (its final URL scheme), never on the
+    target URL/domain, so it applies identically to every website the
+    pipeline visits - it exists to stop the pipeline from silently
+    continuing with an empty chrome-error://chromewebdata/ document as if
+    rendering had succeeded.
+    """
+
+
+# Chromium's own internal scheme for "navigation did not reach the real
+# page" (DNS failure, connection reset, protocol error, etc.) - part of the
+# browser engine itself, not tied to any specific website's markup.
+_BROWSER_ERROR_URL_PREFIXES = ("chrome-error://",)
+
+
+def _is_browser_error_page(page_url: str) -> bool:
+    return any(page_url.startswith(prefix) for prefix in _BROWSER_ERROR_URL_PREFIXES)
+
+
 async def fetch_webpage(url: str, timeout_ms: int = 30000) -> Dict[str, Any]:
     """
     Launches a headless Chromium browser, navigates to the url, renders JavaScript,
@@ -86,12 +111,79 @@ async def fetch_webpage(url: str, timeout_ms: int = 30000) -> Dict[str, Any]:
             page.set_default_timeout(timeout_ms)
             content_sources = ["Main Page"]
             
-            logger.debug(f"Navigating to {url}...")
-            try:
-                await page.goto(url, wait_until=wait_until, timeout=timeout_ms)
-            except Exception as goto_error:
-                logger.warning(f"Navigation timeout/error occurred for {url}. Proceeding: {goto_error}")
-            
+            nav_retries = int(os.getenv("PLAYWRIGHT_NAV_RETRIES", "1"))
+            nav_retry_delay_ms = int(os.getenv("PLAYWRIGHT_NAV_RETRY_DELAY_MS", "2000"))
+            max_attempts = nav_retries + 1
+            nav_start = time.time()
+
+            for attempt in range(1, max_attempts + 1):
+                attempt_start = time.time()
+                goto_error = None
+                response = None
+                logger.debug(f"Navigating to {url} (attempt {attempt}/{max_attempts}, wait_until={wait_until})...")
+                try:
+                    response = await page.goto(url, wait_until=wait_until, timeout=timeout_ms)
+                except Exception as e:
+                    goto_error = e
+
+                # A hard network-level failure (e.g. ERR_HTTP2_PROTOCOL_ERROR,
+                # ERR_CONNECTION_RESET) can leave the page on "about:blank"
+                # for a moment before Chromium finishes transitioning to its
+                # internal chrome-error:// interstitial - give it a brief
+                # moment to settle before checking where navigation landed.
+                await page.wait_for_timeout(500)
+                final_nav_url = page.url
+                attempt_elapsed = time.time() - attempt_start
+                landed_on_error_page = _is_browser_error_page(final_nav_url)
+
+                if not landed_on_error_page:
+                    status = response.status if response else None
+                    if goto_error is None:
+                        logger.info(
+                            f"Navigation succeeded on attempt {attempt}/{max_attempts} for {url} -> "
+                            f"{final_nav_url} (status={status}, elapsed={attempt_elapsed:.2f}s)"
+                        )
+                    else:
+                        # goto() raised (e.g. a timeout waiting for wait_until)
+                        # but the browser is NOT stuck on an error page - most
+                        # likely the DOM loaded but a slow subresource kept the
+                        # wait condition from firing in time. Proceed with
+                        # whatever is currently rendered, same as this
+                        # function's long-standing behavior for slow-but-working
+                        # pages - only a genuine landing on chrome-error:// is
+                        # treated as an unrecoverable navigation failure below.
+                        logger.warning(
+                            f"Navigation attempt {attempt}/{max_attempts} for {url} raised "
+                            f"{type(goto_error).__name__}: {goto_error}, but the browser landed on a "
+                            f"real page ({final_nav_url}) - proceeding with the currently rendered content "
+                            f"(elapsed={attempt_elapsed:.2f}s)."
+                        )
+                    break
+
+                reason = (
+                    f"{type(goto_error).__name__}: {goto_error}" if goto_error is not None
+                    else f"browser landed on an internal error page ({final_nav_url})"
+                )
+                logger.warning(
+                    f"Navigation attempt {attempt}/{max_attempts} failed for {url}: {reason} "
+                    f"(elapsed={attempt_elapsed:.2f}s)"
+                )
+
+                if attempt < max_attempts:
+                    logger.info(f"Retrying navigation to {url} in {nav_retry_delay_ms}ms...")
+                    await page.wait_for_timeout(nav_retry_delay_ms)
+                else:
+                    nav_elapsed = time.time() - nav_start
+                    logger.error(
+                        f"Navigation failed for requested_url={url} | final_url={final_nav_url} | "
+                        f"reason={reason} | attempts={max_attempts} | elapsed={nav_elapsed:.2f}s | "
+                        f"headless={headless} | wait_until={wait_until} | timeout_ms={timeout_ms}"
+                    )
+                    raise BrowserNavigationError(
+                        f"Failed to render '{url}' after {max_attempts} attempt(s): {reason}. "
+                        f"The target site may be blocking automated browsers, or is unreachable."
+                    )
+
             # Post-load delay
             if wait_after_load_ms > 0:
                 await page.wait_for_timeout(wait_after_load_ms)

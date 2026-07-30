@@ -53,6 +53,9 @@ datasets/*.csv
 *.csv
 !.gitkeep
 
+# ConfigStore/SchemaStore/JobStore runtime data (user-created, not code)
+storage/
+
 # System files
 .DS_Store
 Thumbs.db

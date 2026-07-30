@@ -113,8 +113,8 @@ def test_prompt_builder_fallback_deterministic():
     )
     
     import re
-    solved_match = re.search(r"### ALREADY SOLVED FIELDS.*?\n(?:.*\n)*?\n###", prompt)
-    remaining_match = re.search(r"### REMAINING FIELDS TO EXTRACT.*?\n(?:.*\n)*?$", prompt)
+    solved_match = re.search(r"## 4\. ALREADY EXTRACTED FIELDS.*?\n(?:.*\n)*?\n##", prompt)
+    remaining_match = re.search(r"## 5\. REMAINING FIELDS TO EXTRACT.*?\n(?:.*\n)*?\n##", prompt)
     
     solved_section = solved_match.group(0) if solved_match else ""
     remaining_section = remaining_match.group(0) if remaining_match else ""

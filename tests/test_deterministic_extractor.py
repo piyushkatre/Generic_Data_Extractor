@@ -35,8 +35,11 @@ def test_deterministic_extractor_basic():
     extractor = DeterministicExtractor()
     res = extractor.extract(html)
 
+    # Brand/title cleanup regex (stripping "- Franchise Opportunity" suffixes)
+    # was removed as franchise-specific text cleanup that doesn't belong in a
+    # generic engine; brand now falls back to the raw franchise_name value.
     assert res["franchise_name"] == "Cult Fit Franchise Opportunity"
-    assert res["brand"] == "Cult Fit"
+    assert res["brand"] == "Cult Fit Franchise Opportunity"
     assert res["investment_required"] == "Rs. 30 Lakhs - 50 Lakhs"
     assert res["franchise_fee"] == "Rs. 5 Lakhs"
     assert res["franchise_since"] == "2018"

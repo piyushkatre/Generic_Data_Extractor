@@ -53,10 +53,13 @@ class ExtractionInspector:
         self.final_row = self._read_json("09_final_row.json") or {}
         self.layouts_trace = self._read_json("05_layouts.json") or []
 
-        # Resolve deterministic & LLM solved lists from validated record metadata
+        # Resolve deterministic & LLM solved lists from validated record
+        # metadata. core/pipeline.py writes these as "fields_from_dom" /
+        # "fields_from_llm" - this used to read "fields_from_gemini", a name
+        # nothing writes anymore, same mismatch fixed in schema_mapper.py.
         self.fields_from_dom = set()
-        self.fields_from_gemini = set()
-        
+        self.fields_from_llm = set()
+
         metadata = self.validated.get("metadata", [])
         if isinstance(metadata, list):
             for item in metadata:
@@ -68,8 +71,8 @@ class ExtractionInspector:
                     v = getattr(item, "value", None)
                 if k == "fields_from_dom" and v:
                     self.fields_from_dom = set(x.strip() for x in str(v).split(",") if x.strip())
-                elif k == "fields_from_gemini" and v:
-                    self.fields_from_gemini = set(x.strip() for x in str(v).split(",") if x.strip())
+                elif k == "fields_from_llm" and v:
+                    self.fields_from_llm = set(x.strip() for x in str(v).split(",") if x.strip())
 
     def _read_file(self, filename: str) -> str:
         path = os.path.join(self.debug_dir, filename)

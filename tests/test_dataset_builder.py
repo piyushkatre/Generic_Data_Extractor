@@ -34,7 +34,18 @@ def setup_test_directories():
             "phone": "Phone",
             "website": "Website"
         },
-        "columns": ["Source URL", "Franchise Name", "Brand", "Investment Required", "Phone", "Website", "Additional Information", "Extraction Date", "Last Updated"]
+        "columns": ["Source URL", "Franchise Name", "Brand", "Investment Required", "Phone", "Website", "Additional Information", "Extraction Date", "Last Updated"],
+        # Explicit field declarations: the new schema-driven dynamic model
+        # (SchemaLoader.build_model) only exposes fields a schema actually
+        # declares here - it no longer inherits a fixed set of ~45
+        # franchise-shaped fields from a base class, so a schema that wants
+        # a field merged/mapped must say so explicitly.
+        "extraction_fields": {
+            "franchise_name": {"type": "string", "description": "Name of the franchise"},
+            "investment_required": {"type": "string", "description": "Investment required"},
+            "phone": {"type": "string", "description": "Contact phone number"},
+            "website": {"type": "string", "description": "Official website URL"}
+        }
     }
     
     misc_mock = {
@@ -662,12 +673,16 @@ def test_locked_excel_file_handling():
         assert "locked/open" in res_save["reason"]
         assert "File Locked" in res_save["operation"]
 
-        # Run process_urls and verify it maps locked failure without crashing
-        with patch("modules.dataset_builder.builder.fetch_webpage", return_value={"html": "<html></html>", "title": "Locked"}):
-            with patch("modules.dataset_builder.builder.extract_web_data", return_value=result):
-                with patch("modules.dataset_builder.builder.WorkbookManager.write_extracted_records", side_effect=ExcelFileLockedError("Locked file error")):
-                    batch_res = asyncio.run(builder.process_urls(["https://testlocked.com"]))
-                    assert batch_res["failed"] == 1
-                    assert batch_res["details"][0]["status"] == "Failed (File Locked)"
+    # process_urls()'s own exception handling: DatasetBuilder.save_extraction_result()
+    # deliberately catches ExcelFileLockedError itself and returns a status
+    # dict rather than raising (tested above) - so the only way
+    # process_urls() ever observes ExcelFileLockedError as a raised
+    # exception is from something inside its own pipeline.run() call.
+    # Verify that contract directly rather than indirectly, by making the
+    # pipeline run itself raise it.
+    with patch("core.pipeline.ExtractionPipeline.run", side_effect=ExcelFileLockedError("Locked file error")):
+        batch_res = asyncio.run(builder.process_urls(["https://testlocked.com"]))
+        assert batch_res["failed"] == 1
+        assert batch_res["details"][0]["status"] == "Failed (File Locked)"
 
 

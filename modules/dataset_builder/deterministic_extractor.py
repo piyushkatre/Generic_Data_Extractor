@@ -9,6 +9,15 @@ import inspect
 
 logger = get_logger(__name__)
 
+# Legacy fallback vocabulary for franchise-shaped schemas. Schema-declared
+# aliases (schema["aliases"]) always take priority when present — see
+# resolve_key_to_field() below. This registry only ever resolves to field
+# names already registered in core/field_strategy.py, so it is inert (never
+# mis-captures a field) for any schema whose field names aren't part of that
+# franchise-shaped set. It exists so DeterministicExtractor still produces
+# useful output when constructed without a schema, or with a schema that
+# doesn't declare its own aliases. Kept intentionally (not schema-driven yet)
+# until field ownership itself becomes schema-driven in a later milestone.
 CONCEPT_REGISTRY = {
     "investment_required": ["investment", "capital", "investment required", "initial investment", "total investment", "capital required"],
     "area_required": ["area", "space", "floor area", "space required", "store size", "area required"],
@@ -33,6 +42,80 @@ CONCEPT_REGISTRY = {
     "brand": ["brand", "brand name", "name of brand"],
     "franchise_name": ["franchise name", "name of the franchise"]
 }
+
+# ---------------------------------------------------------------------------
+# Generic "Label: Value Label: Value ..." text-blob parsing.
+#
+# Some pages pack multiple key/value pairs as one continuous run of text
+# inside a single element with no per-pair child element to split on (e.g.
+# a <div> whose only content is the literal text
+# "Operations Commenced On: 2023 Franchising / Distribution Commenced On:
+# 2025 Number of Employees: 15" - no <li>/<span>/<dt> boundaries at all).
+# detect_and_classify_layouts() has no element-count signal to work with
+# for this shape (0 or 1 direct children), so it falls back to detecting
+# the pattern in the raw TEXT itself. A "label" is a short run of words
+# starting with a capital letter (allowing "/", "&", and lowercase
+# connector words like "of"/"on" within it) immediately followed by ":".
+# This is purely structural - it never references any specific label text,
+# class name, id, or site.
+_LABEL_FIRST_WORD = r"[A-Z][A-Za-z\-]*"
+_LABEL_OTHER_WORD = r"[A-Za-z][A-Za-z\-]*"
+_LABEL_WORD_SEP = r"[\s/&]+"
+_LABEL_VALUE_PATTERN = re.compile(
+    rf"(?P<label>{_LABEL_FIRST_WORD}(?:{_LABEL_WORD_SEP}{_LABEL_OTHER_WORD}){{0,5}})\s*:\s*"
+)
+
+
+def _extract_label_value_pairs_from_text(text: str) -> List[Tuple[str, str]]:
+    """
+    Splits text containing zero or more "Label: Value" pairs with no
+    element-level separation between them, in two tiers:
+
+    1. If the text splits into 2+ real lines (BeautifulSoup preserves
+       literal newlines present in the source text node) and EVERY line
+       independently looks like exactly one "Label: Value" pair, use that
+       directly - each line is already unambiguous on its own, including
+       when a value happens to look like a label-shaped word (e.g. a name).
+    2. Otherwise (everything collapsed onto one line, as in the motivating
+       real-world case), fall back to finding every "Label:" boundary in
+       the whole blob and taking each value as the text up to the next
+       boundary (or end of string). This is unambiguous whenever values
+       are non-word text (numbers, currency, etc.), which is the common
+       case for this shape - see the docstring above for why a value that
+       itself looks like another label is a known, accepted limitation of
+       text-only inference without line breaks to lean on.
+    """
+    if not text:
+        return []
+
+    lines = [ln.strip() for ln in text.split("\n") if ln.strip()]
+    if len(lines) >= 2:
+        line_pairs: List[Tuple[str, str]] = []
+        for ln in lines:
+            m = _LABEL_VALUE_PATTERN.match(ln)
+            if not m:
+                line_pairs = []
+                break
+            label = m.group("label").strip()
+            value = ln[m.end():].strip()
+            if not label or not value:
+                line_pairs = []
+                break
+            line_pairs.append((label, value))
+        if len(line_pairs) >= 2:
+            return line_pairs
+
+    matches = list(_LABEL_VALUE_PATTERN.finditer(text))
+    pairs: List[Tuple[str, str]] = []
+    for i, m in enumerate(matches):
+        label = m.group("label").strip()
+        value_start = m.end()
+        value_end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
+        value = text[value_start:value_end].strip()
+        if label and value:
+            pairs.append((label, value))
+    return pairs
+
 
 class DeterministicExtractor:
     """
@@ -68,18 +151,23 @@ class DeterministicExtractor:
                 self.raw_to_field[alias_key.lower().strip()] = field_key
 
     def is_portal_link(self, href: str, current_url: str = "") -> bool:
+        """
+        Detects self-referential links (the current page linking back to its own
+        site/portal) generically, from the current page's own domain — no
+        hardcoded list of known portal names.
+        """
         href_lower = href.lower().strip()
-        
+
         # Skip social sharing URLs
         share_patterns = [
-            "share", "sharer", "intent/tweet", "sharearticle", "dialog/share", 
+            "share", "sharer", "intent/tweet", "sharearticle", "dialog/share",
             "pin/create", "sharing", "twitter.com/home?status", "facebook.com/sharer.php"
         ]
         if any(p in href_lower for p in share_patterns):
             return True
-            
-        # Skip portal self-referential domains/usernames
-        portal_domains = ["franchisebazar", "franchisemart", "franchiseindia"]
+
+        # Skip links pointing back to the current page's own domain
+        own_domain_parts = set()
         if current_url:
             from urllib.parse import urlparse
             try:
@@ -88,13 +176,12 @@ class DeterministicExtractor:
                 domain_parts = netloc.split(".")
                 for part in domain_parts:
                     if len(part) > 3 and part not in ("www", "com", "net", "org", "co", "in"):
-                        portal_domains.append(part)
+                        own_domain_parts.add(part)
             except Exception:
                 pass
-                
-        portal_domains = list(set(portal_domains))
-        for pd in portal_domains:
-            if pd in href_lower:
+
+        for part in own_domain_parts:
+            if part in href_lower:
                 return True
         return False
 
@@ -265,7 +352,29 @@ class DeterministicExtractor:
                         "element": div,
                         "snippet": str(div)[:200]
                     })
-                    
+
+            elif len(children) <= 1:
+                # Generic text-blob variant of a Summary Layout: no distinct
+                # per-pair child element at all (0 children), or a single
+                # wrapper child (1 child) - e.g. <div class="body-item">
+                # wrapping one <div class="body-content"> that itself holds
+                # several "Label: Value" pairs as one run of text with no
+                # <li>/<span>/<dt> boundaries between them. Detected purely
+                # from the TEXT structure (see _extract_label_value_pairs_from_text),
+                # never from class names/ids/selectors.
+                if len(children) == 1 and children[0].name in ("div", "section"):
+                    # Defer to the child - it's visited separately by this
+                    # same loop and is the more specific match, avoiding a
+                    # duplicate classification of the same text twice.
+                    continue
+                text = div.get_text(separator=" ", strip=True)
+                if len(_extract_label_value_pairs_from_text(text)) >= 2:
+                    classified_layouts.append({
+                        "type": "Summary Layout",
+                        "element": div,
+                        "snippet": str(div)[:200]
+                    })
+
         # 6. Heading Sections (Content Section)
         for heading in soup.find_all(["h1", "h2", "h3", "h4", "h5", "h6"]):
             # Prevent re-adding Q&A headings as normal content sections
@@ -387,7 +496,18 @@ class DeterministicExtractor:
                 if ":" in text:
                     parts = text.split(":", 1)
                     relationships.append((parts[0], parts[1]))
-                    
+
+            if not relationships:
+                # Text-blob variant (detect_and_classify_layouts() rule 5,
+                # the <=1-child branch): no descendant element carried an
+                # individual "Label: Value" pair, because there are no
+                # per-pair child elements at all. Reuse the same generic
+                # pattern matcher used to detect this layout in the first
+                # place, applied to the element's own text - not a separate
+                # extraction pipeline.
+                text = el.get_text(separator=" ", strip=True)
+                relationships.extend(_extract_label_value_pairs_from_text(text))
+
         elif l_type == "Checklist Layout":
             list_items = [li.get_text(separator=" ", strip=True) for li in el.find_all("li") if li.get_text(strip=True)]
             prev_header = el.find_previous(["h1", "h2", "h3", "h4", "h5", "h6"])
@@ -540,32 +660,16 @@ class DeterministicExtractor:
                 logger.warning(f"Failed to extract phone from whatsapp_link: {e}")
 
 
-        # Hardcoded fallbacks & details derivation for backwards compatibility
+        # Fall back to franchise_name for brand when brand wasn't resolved
+        # elsewhere (or looks like an oversized, mis-captured blob of text).
         if extracted.get("franchise_name"):
-            clean_brand = extracted["franchise_name"]
-
-            clean_brand = re.sub(
-                r"(?i)\s*[-|]\s*franchise\s+opportunity.*$",
-                "",
-                clean_brand,
-            )
-
-            clean_brand = re.sub(
-                r"\s*\|.*$",
-                "",
-                clean_brand,
-            )
-
-            clean_brand = clean_brand.strip()
-
             current_brand = extracted.get("brand")
-
             if (
                 not current_brand
                 or len(current_brand.split()) > 8
                 or len(current_brand) > 60
             ):
-                extracted["brand"] = clean_brand
+                extracted["brand"] = extracted["franchise_name"]
 
 
         if "franchise_since" in extracted and "franchise_start_year" not in extracted:
@@ -656,18 +760,6 @@ class DeterministicExtractor:
 
             if not value:
                 continue
-
-            value = re.sub(
-                r"(?i)\s*[-|–]\s*franchise opportunity.*$",
-                "",
-                value,
-            )
-
-            value = re.sub(
-                r"(?i)\s*\|\s*best.*$",
-                "",
-                value,
-            )
 
             value = value.strip()
 

@@ -51,6 +51,28 @@ class ExtractorConfig(BaseModel):
         default=32768,
         description="Context window size to request from local Ollama instance."
     )
+    OLLAMA_TIMEOUT: float = Field(
+        default=600.0,
+        description=(
+            "Read timeout in seconds for a single Ollama generation request - "
+            "how long to wait for the model to finish producing a response "
+            "before treating the request as timed out. Local generation time "
+            "scales with model size, so larger models (e.g. moving from a 3B "
+            "to a 7B+ model) need a larger value than smaller ones."
+        )
+    )
+    OLLAMA_CONNECT_TIMEOUT: float = Field(
+        default=10.0,
+        description=(
+            "Connect timeout in seconds for reaching the Ollama server itself "
+            "(separate from OLLAMA_TIMEOUT, which only bounds how long "
+            "generation may take once connected). Kept short by default: a "
+            "local Ollama server should accept a TCP connection almost "
+            "instantly, so a slow connect usually means Ollama isn't running "
+            "or OLLAMA_BASE_URL is wrong - failing fast on that surfaces a "
+            "clear diagnosis instead of waiting the full generation timeout."
+        )
+    )
 
     @classmethod
     def load(cls) -> "ExtractorConfig":
@@ -68,6 +90,8 @@ class ExtractorConfig(BaseModel):
         ollama_model = os.getenv("OLLAMA_MODEL", "qwen2.5:7b")
         ollama_base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
         ollama_num_ctx = int(os.getenv("OLLAMA_NUM_CTX", "32768"))
+        ollama_timeout = float(os.getenv("OLLAMA_TIMEOUT", "600.0"))
+        ollama_connect_timeout = float(os.getenv("OLLAMA_CONNECT_TIMEOUT", "10.0"))
 
         models_raw = os.getenv("GEMINI_MODELS")
         if models_raw:
@@ -85,6 +109,8 @@ class ExtractorConfig(BaseModel):
             LLM_PROVIDER=llm_provider,
             OLLAMA_MODEL=ollama_model,
             OLLAMA_BASE_URL=ollama_base_url,
-            OLLAMA_NUM_CTX=ollama_num_ctx
+            OLLAMA_NUM_CTX=ollama_num_ctx,
+            OLLAMA_TIMEOUT=ollama_timeout,
+            OLLAMA_CONNECT_TIMEOUT=ollama_connect_timeout
         )
 

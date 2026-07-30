@@ -205,14 +205,21 @@ class RecordMapper:
         self.columns: List[str] = schema.get("columns", [])
         self.required_fields: List[str] = schema.get("required_fields", [])
 
-    def map(self, result: Any, source_url: str, html_content: Optional[str] = None) -> Any:
+    def map(self, result: Any, source_url: str, html_content: Optional[str] = None, already_validated: bool = False) -> Any:
         from modules.dataset_builder.schema_mapper import SchemaMapper
         from modules.dataset_builder.record_validator import RecordValidator
-        
-        # Ensure validation and numeric range derivation are executed (robust fallback for direct mapper calls in tests)
-        result = RecordValidator.validate_record(result)
-        result = RecordValidator.derive_numeric_ranges(result)
-        
+
+        # Ensure validation and numeric range derivation are executed - a
+        # robust fallback for callers (tests, DatasetBuilder's raw-result
+        # path) that pass a record straight from extraction, never through
+        # RecordValidator themselves. Callers that already ran RecordValidator
+        # (core/pipeline.py's Schema Mapping stage, right after its own
+        # Validation stage) should pass already_validated=True so this isn't
+        # redundantly run a second time on the same record.
+        if not already_validated:
+            result = RecordValidator.validate_record(result)
+            result = RecordValidator.derive_numeric_ranges(result)
+
         mapper = SchemaMapper(excel_columns=self.columns, schema_aliases=self.schema.get("aliases"), schema=self.schema)
         mapping_result = mapper.map_to_excel(result, source_url, html_content=html_content)
 

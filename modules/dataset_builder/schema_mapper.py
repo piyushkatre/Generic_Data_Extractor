@@ -5,6 +5,7 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional, Tuple, Set
 from utils.logger import get_logger
 from core.field_strategy import FIELD_STRATEGY
+from modules.validation import formatters
 
 logger = get_logger(__name__)
 
@@ -252,90 +253,6 @@ class SchemaMapper:
         except Exception as e:
             logger.error(f"Failed to load schema aliases: {e}", exc_info=True)
             return {}
-
-    def _format_single_investment(self, amount: int, symbol: str = "₹") -> str:
-        if symbol != "₹":
-            return f"{symbol}{amount:,}"
-        if amount >= 10000000 and amount % 10000000 == 0:
-            return f"₹{amount // 10000000} Crore"
-        elif amount >= 10000000 and amount % 1000000 == 0:
-            return f"₹{amount / 10000000:.1f} Crore".replace(".0 Crore", " Crore")
-        elif amount >= 100000 and amount % 100000 == 0:
-            return f"₹{amount // 100000} Lakhs"
-        elif amount >= 100000 and amount % 10000 == 0:
-            return f"₹{amount / 100000:.1f} Lakhs".replace(".0 Lakhs", " Lakhs")
-        elif amount >= 1000 and amount % 1000 == 0:
-            return f"₹{amount // 1000} K"
-        else:
-            return f"₹{amount:,}"
-
-    def _normalize_investment_text(self, text: str) -> str:
-        if not text:
-            return ""
-        
-        # Parse using static range parser
-        min_val, max_val = self.parse_investment_range(text)
-        symbol = "$" if "$" in str(text) or "usd" in str(text).lower() else "₹"
-        
-        if min_val is not None and max_val is not None:
-            return f"{self._format_single_investment(min_val, symbol=symbol)} - {self._format_single_investment(max_val, symbol=symbol)}"
-        elif min_val is not None:
-            t_low = str(text).lower()
-            if any(w in t_low for w in ["above", "min", "greater", "starting", "from"]):
-                return f"Starting from {self._format_single_investment(min_val, symbol=symbol)}"
-            return self._format_single_investment(min_val, symbol=symbol)
-        elif max_val is not None:
-            return f"Upto {self._format_single_investment(max_val, symbol=symbol)}"
-            
-        # Fallback to general cleaning if range parsing failed
-        text = str(text).strip()
-        text = re.sub(r"(?i)\b(rs\.?|inr)\s*", "₹", text)
-        text = re.sub(r"₹\s*", "₹", text)
-        text = re.sub(r"(?i)(\d+)\s*(lakhs?|lakh)\b", r"\1 Lakhs", text)
-        text = re.sub(r"(?i)(\d+)\s*(crores?|crore|cr)\b", r"\1 Crore", text)
-        text = re.sub(r"\s*[\-–—]\s*", " - ", text)
-        return text
-
-    def _normalize_area_text(self, text: str) -> str:
-        text = str(text).strip()
-        if not text:
-            return ""
-        # Normalize space/dash between ranges to en-dash (–) or standard hyphen (-)
-        text = re.sub(r"\s*[\-–—]\s*", "-", text)
-        text_lower = text.lower()
-        # Remove any existing unit suffix to normalize
-        text = re.sub(r"(?i)\s*(sq\.?\s*f[t|eet]+|sqft|sft)\b", "", text)
-        text = text.strip()
-        text = f"{text} Sq.ft"
-        return text
-
-    def _normalize_hours_text(self, text: str) -> str:
-        text = str(text).strip()
-        if not text:
-            return ""
-        text = re.sub(r"(?i)\s*(hrs|hr|hours?)(?:\s*/\s*month)?\b", " hrs/month", text)
-        if "hrs/month" not in text:
-            text = f"{text} hrs/month"
-        text = re.sub(r"(\d+)\s*[\-–—]\s*(\d+)", r"\1-\2", text)
-        return text
-
-    def _normalize_phone(self, phone: str) -> str:
-        phone_str = str(phone).strip()
-        cleaned = re.sub(r"[^\d\+\-\(\)\s]", "", phone_str)
-        cleaned = re.sub(r"\s+", " ", cleaned).strip()
-        
-        digits = re.sub(r"\D", "", cleaned)
-        if not digits:
-            return cleaned
-        
-        has_formatting = any(char in phone_str for char in ("-", "(", ")", " "))
-        if not has_formatting:
-            if len(digits) == 10:
-                return f"+91 {digits}"
-            elif len(digits) == 12 and digits.startswith("91"):
-                return f"+91 {digits[2:]}"
-        
-        return cleaned
 
     def _strip_tracking_params(self, url_str: str) -> str:
         if not isinstance(url_str, str) or not ("http://" in url_str or "https://" in url_str):
@@ -638,12 +555,17 @@ class SchemaMapper:
                 normalized_record[add_col] = ""
 
         # ── Step 7: Coverage Validation & Detailed Reports ──
+        # NOTE: core/pipeline.py writes these two metadata keys as
+        # "fields_from_dom" / "fields_from_llm" (see its Hybrid Merge stage).
+        # This used to read "fields_from_gemini" - a name nothing writes
+        # anymore since the pipeline stopped being Gemini-specific - which
+        # made llm_count always 0 regardless of actual LLM contribution.
         metadata_list = raw_dict.get("metadata") or []
         fields_from_dom = set()
-        fields_from_gemini = set()
+        fields_from_llm = set()
         if isinstance(metadata_list, dict):
             fields_from_dom = set(metadata_list.get("fields_from_dom") or [])
-            fields_from_gemini = set(metadata_list.get("fields_from_gemini") or [])
+            fields_from_llm = set(metadata_list.get("fields_from_llm") or [])
         else:
             for item in metadata_list:
                 if isinstance(item, dict):
@@ -652,11 +574,11 @@ class SchemaMapper:
                 else:
                     k_item = getattr(item, "key", None)
                     v_item = getattr(item, "value", None)
-                
+
                 if k_item == "fields_from_dom" and v_item:
                     fields_from_dom = set([x.strip() for x in str(v_item).split(",") if x.strip()])
-                elif k_item == "fields_from_gemini" and v_item:
-                    fields_from_gemini = set([x.strip() for x in str(v_item).split(",") if x.strip()])
+                elif k_item == "fields_from_llm" and v_item:
+                    fields_from_llm = set([x.strip() for x in str(v_item).split(",") if x.strip()])
 
         core_fields = [k for k in raw_dict.keys() if k not in ("entities", "page_title", "page_summary", "metadata", "additional_information")]
         total_schema_fields = len(core_fields)
@@ -666,7 +588,7 @@ class SchemaMapper:
         # Calculate coverage details
         mapped_count = len(mapped_details)
         det_count = len([f for f in mapped_details.values() if f[0] in fields_from_dom])
-        llm_count = len([f for f in mapped_details.values() if f[0] in fields_from_gemini])
+        llm_count = len([f for f in mapped_details.values() if f[0] in fields_from_llm])
         norm_count = len([k for k in ("investment_required", "franchise_fee", "royalty", "area_required", "expected_hours", "phone", "email", "website") if raw_dict.get(k)])
         merged_count = len(merged_log)
         coverage_pct = (mapped_count / len(self.excel_columns) * 100.0) if self.excel_columns else 0.0
@@ -760,53 +682,8 @@ class SchemaMapper:
 
     @staticmethod
     def parse_investment_range(text: Any) -> Tuple[Optional[int], Optional[int]]:
-        if not text:
-            return None, None
-        text_lower = str(text).lower()
-        # Remove commas inside numbers to avoid splitting them (e.g. 60,000 -> 60000)
-        text_lower = text_lower.replace(",", "")
-        
-        nums = re.findall(r"\d+(?:\.\d+)?", text_lower)
-        if not nums:
-            return None, None
-        
-        factor = 1.0
-        if "lakh" in text_lower:
-            factor = 100000.0
-        elif "crore" in text_lower or "cr" in text_lower:
-            factor = 10000000.0
-        elif "million" in text_lower:
-            factor = 1000000.0
-        elif "thousand" in text_lower or "k" in text_lower:
-            factor = 1000.0
-            
-        parsed_nums = [int(float(n) * factor) for n in nums]
-        
-        if len(parsed_nums) >= 2:
-            return parsed_nums[0], parsed_nums[1]
-        elif len(parsed_nums) == 1:
-            if any(kw in text_lower for kw in ["upto", "up to", "max", "below", "less than"]):
-                return None, parsed_nums[0]
-            else:
-                return parsed_nums[0], None
-        return None, None
+        return formatters.parse_investment_range(text)
 
     @staticmethod
     def parse_area_range(text: Any) -> Tuple[Optional[int], Optional[int]]:
-        if not text:
-            return None, None
-        text_lower = str(text).lower()
-        
-        nums = re.findall(r"\d+", text_lower)
-        if not nums:
-            return None, None
-            
-        parsed_nums = [int(n) for n in nums]
-        if len(parsed_nums) >= 2:
-            return parsed_nums[0], parsed_nums[1]
-        elif len(parsed_nums) == 1:
-            if any(kw in text_lower for kw in ["upto", "up to", "max", "below", "left than", "less than"]):
-                return None, parsed_nums[0]
-            else:
-                return parsed_nums[0], None
-        return None, None
+        return formatters.parse_area_range(text)
